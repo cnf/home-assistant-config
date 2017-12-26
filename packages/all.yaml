@@ -1,0 +1,20 @@
+homeassistant:
+  customize:
+    group.all:
+      order: 9
+group:
+  ALL:
+    name: ALL
+    view: yes
+    entities:
+      - group.all_switches
+      - group.all_lights
+      - group.all_scenes
+      - group.all_devices
+      - group.all_scripts
+      - group.all_automations
+      - group.all_zwave
+      - group.all_sensors
+      - group.smokes
+      - group.air_quality_home_card
+      - configurator.philips_hue

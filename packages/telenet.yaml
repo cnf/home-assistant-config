@@ -1,0 +1,24 @@
+automation:
+  - alias: Telenet - arrive
+    trigger:
+      platform: zone
+      zone: zone.telenet
+      event: enter
+      entity_id: device_tracker.milo
+    action:
+      - service:  notify.cnf
+        data:
+          title: "Zone Change"
+          message: "You are arrving at *Telenet*"
+
+  - alias: Telenet - leave
+    trigger:
+      platform: zone
+      zone: zone.telenet
+      event: leave
+      entity_id: device_tracker.milo
+    action:
+      - service:  notify.cnf
+        data:
+          title: "Zone Change"
+          message: "You are leaving *Telenet*"

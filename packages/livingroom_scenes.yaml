@@ -1,0 +1,116 @@
+scene:
+  - name: Daytime
+    entities:
+      group.lr_media_backlight:
+        state: off
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 100
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 100
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 100
+      light.lr_message:
+        state: on
+        brightness_pct: 70
+      light.lr_ceiling:
+        state: on
+        brightness_pct: 70
+
+  - name: Evening
+    entities:
+      group.lr_media_backlight:
+        state: on
+        brightness_pct: 70
+        color_temp: 500
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 100
+        color_temp: 500
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 100
+        color_temp: 500
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 100
+        color_temp: 500
+      light.lr_message:
+        state: on
+        brightness_pct: 70
+        color_temp: 500
+      light.lr_ceiling:
+        state: on
+        brightness_pct: 60
+        color_temp: 500
+
+  - name: TV
+    entities:
+      group.lr_media_backlight:
+        state: on
+        brightness_pct: 50
+        color_temp: 500
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 60
+        color_temp: 500
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 60
+        color_temp: 500
+      light.lr_ceiling:
+        state: off
+      light.lr_message:
+        state: off
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 30
+        color_temp: 500
+
+  - name: PC Gaming
+    entities: 
+      group.lr_media_backlight:
+        state: on
+        brightness_pct: 70
+        color_name: 'darkorange'
+      light.lr_message:
+        state: off
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 100
+        color_name: 'darkorange'
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 100
+        color_name: 'darkorange'
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 100
+        color_name: 'darkorange'
+      light.lr_ceiling:
+        state: on
+        brightness_pct: 30
+        color_temp: 500
+
+  - name: F00
+    entities: 
+      group.lr_media_backlight:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 145]
+      light.lr_message:
+        state: off
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 145]
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 145]
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 145]

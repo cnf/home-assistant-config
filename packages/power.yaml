@@ -1,0 +1,68 @@
+homeassistant:
+  customize:
+    group.Power_view:
+      order: 8
+
+group:
+  Power_view:
+    name: Power
+    icon: mdi:power-socket
+    view: yes
+    entities:
+      - group.lr_media_power
+      - group.lr_desk_power
+      - group.lr_desk_speakers_power
+      - group.lr_heater_power
+
+#  Blue_Ring_Power:
+#    name: Blue Ring Power
+#    icon: mdi:power-socket
+#    view: no
+#    entities:
+#      - switch.powerbluering_switch
+#      - sensor.powerbluering_power
+#      - sensor.powerbluering_energy
+#      - sensor.powerbluering_interval
+#      - sensor.powerbluering_interval_2
+#      - sensor.powerbluering_system
+#      #- sensor.powerbluering_previous_reading
+#      #- sensor.powerbluering_previous_reading_2
+#      #- sensor.powerbluering_power_management
+
+  lr_media_power:
+    name: Livingroom - media power
+    icon: mdi:power-socket
+    view: no
+    entities:
+      #- switch.lr_media_pwr_switch
+      - sensor.lr_media_pwr_power
+      - sensor.lr_media_pwr_energy
+
+  lr_desk_power:
+    name: Livingroom Desk - screen power
+    icon: mdi:power-socket
+    view: no
+    entities:
+      - switch.lr_desk_pwr_switch
+      - sensor.lr_desk_pwr_power
+      - sensor.lr_desk_pwr_energy
+
+  lr_desk_speakers_power:
+    name: Livingroom Desk - speaker power
+    icon: mdi:power-socket
+    view: no
+    entities:
+      - switch.lr_desk_speakers_pwr_switch
+      - sensor.lr_desk_speakers_pwr_power
+      - sensor.lr_desk_speakers_pwr_energy
+
+  lr_heater_power:
+    name: Livingroom - heater power
+    icon: mdi:power-socket
+    view: no
+    entities:
+      - switch.lr_heater_pwr_switch
+      - sensor.lr_pir_temperature
+      - sensor.lr_heater_pwr_power
+      - sensor.lr_heater_pwr_energy
+

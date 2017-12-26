@@ -1,0 +1,109 @@
+homeassistant:
+  customize:
+    binary_sensor.lr_smoke_sensor:
+      device_class: smoke
+      friendly_name: Livingroom Smoke Sensor
+    binary_sensor.mbr_smoke_sensor:
+      device_class: smoke
+      friendly_name: Bedroom Smoke Sensor
+    binary_sensor.place_smoke_sensor:
+      device_class: smoke
+      friendly_name: Place Smoke Sensor
+
+alarm_control_panel:
+  - platform: manual
+    name: alarm
+    pending_time: 0
+    armed_away:
+      pending_time: 0
+
+binary_sensor:
+  - platform: template
+    sensors:
+      safety:
+        friendly_name: General Alarm
+        device_class: safety
+        entity_id:
+          - binary_sensor.smoke
+          - alarm_control_panel.alarm
+        value_template: >-
+          {{ is_state('alarm_control_panel.alarm', 'triggered') or 
+             binary_sensor.smoke }}
+
+  - platform: template
+    sensors:
+      smoke:
+        friendly_name: Smoke Alarm
+        device_class: smoke
+        entity_id:
+          - binary_sensor.lr_smoke_sensor
+          - binary_sensor.mbr_smoke_sensor
+          - binary_sensor.place_smoke_sensor
+        value_template: >-
+          {{ binary_sensor.lr_smoke_sensor or
+             binary_sensor.mbr_smoke_sensor or
+             binary_sensor.place_smoke_sensor }}
+
+sensor:
+  - platform: template
+    sensors:
+      last_motion:
+        friendly_name: Home - Last Motion
+        value_template: >
+          {%- set sensors = [states.binary_sensor.foyer_pir_sensor, states.binary_sensor.kitchen_pir_sensor, states.binary_sensor.lr_pir_sensor, states.binary_sensor.mbr_pir_sensor, states.binary_sensor.wc_pir_sensor] %}
+          {% for sensor in sensors %}
+            {% if as_timestamp(sensor.last_changed) == as_timestamp(sensors | map(attribute='last_changed') | max) %}
+              {{ sensor.name }}
+            {% endif %}
+          {% endfor %}
+
+automation:
+  - alias: Alarm - Triggered
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.alarm
+        to: 'triggered'
+    action:
+      - service: notify.ios_milo
+        data:
+          message: "ALARM TRIGGERED"
+          data:
+            push:
+              badge: 5
+              sound: US-EN-Morgan-Freeman-Motion-Detected.wav
+              category: 'alarm'
+            action_data:
+              entity_id: light.message
+              my_custom_data: foo_bar
+
+  - alias: iOS SOUND_ALARM
+    trigger: 
+      - platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: SOUND_ALARM
+    action:
+      - service: notify.cnf
+        data:
+          message: "SOUND_ALARM"
+
+  - alias: Alarm - Smoke
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.smoke
+        to: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          brightness_pct: 100
+          color_name: white
+
+script:
+  lr_message_red_flash:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.lr_message
+          color_name: red
+          brightness_pct: 100
+          flash: long

@@ -1,0 +1,97 @@
+homeassistant:
+  customize:
+    group.bedroom:
+      order: 2
+    script.mbr_light_day:
+      hidden: true
+    script.mbr_light_night:
+      hidden: true
+    light.mbr_ceiling:
+      friendly_name: Ceiling Bedroom
+    binary_sensor.mbr_pir_sensor:
+      device_class: motion
+      friendly_name: Bedroom Motion
+    sensor.mbr_pir_temperature:
+      friendly_name: Bedroom Temperature
+    sensor.mbr_pir_luminance:
+      friendly_name: Bedroom Luminance
+    sensor.mbr_smoke_temperature:
+      friendly_name: Bedroom Temperature (SA)
+
+group:
+  bedroom:
+    name: Bedroom
+    icon: mdi:hotel
+    view: yes
+    entities:
+      - group.bedroom_card
+      - binary_sensor.mbr_smoke_sensor
+      - binary_sensor.mbr_pir_sensor
+
+  bedroom_card:
+    name: Master Bedroom
+    view: no
+    entities:
+      - light.mbr_ceiling
+      #- sensor.mbr_smoke_temperature
+      - sensor.mbr_pir_temperature
+      #- sensor.mbr_pir_luminance
+
+automation:
+  - alias: Bedroom - motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.mbr_pir_sensor
+        to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.mbr_light_turn_on
+
+  - alias: Bedroom - no motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.mbr_pir_sensor
+        to: 'off'
+    action:
+      - service: script.turn_on
+        entity_id: script.mbr_light_turn_off
+
+script:
+  mbr_light_turn_off:
+    alias: Bedroom - turn off lights
+    sequence:
+      - service: light.turn_off
+        entity_id:
+          - light.mbr_ceiling
+
+  mbr_light_turn_on:
+    alias: Bedroom - turn on lights
+    sequence:
+      - service: script.turn_on
+        entity_id: 
+          - script.mbr_light_day
+          - script.mbr_light_night
+
+  mbr_light_day:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: disarmed
+      - service: light.turn_on
+        data:
+          entity_id: light.mbr_ceiling
+          brightness_pct: 100
+          color_temp: 500
+          transition: 3
+
+  mbr_light_night:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+      - service: light.turn_on
+        data:
+          entity_id: light.mbr_ceiling
+          brightness_pct: 20
+          color_temp: 500
+          transition: 15

@@ -1,0 +1,92 @@
+homeassistant:
+  customize:
+    light.foyer:
+      friendly_name: Foyer Light
+    binary_sensor.foyer_frontdoor_hal_sensor:
+      device_class: opening
+      friendly_name: Front Door
+    sensor.foyer_frontdoor_hal_temperature:
+      friendly_name: Front Door Temperature
+    sensor.foyer_frontdoor_hal_access_control:
+      friendly_name: Foyer Front Door Access Control
+    binary_sensor.foyer_pir_sensor:
+      device_class: motion
+      friendly_name: Foyer Motion
+    sensor.foyer_pir_temperature:
+      friendly_name: Foyer Temperature 
+    sensor.foyer_pir_luminance:
+      friendly_name: Foyer Luminance
+    sensor.foyer_pir_burglar:
+      friendly_name: Foyer PIR Burglar
+
+group:
+  foyer:
+    name: Foyer
+    view: no
+    entities:
+      - light.foyer
+      - binary_sensor.foyer_pir_sensor
+      - binary_sensor.foyer_frontdoor_hal_sensor
+      - sensor.foyer_frontdoor_hal_temperature
+      - sensor.foyer_pir_temperature
+      - sensor.foyer_pir_luminance
+      #- sensor.foyer_frontdoor_hal_access_control
+
+
+binary_sensor:
+  - platform: template
+    sensors: 
+      foyer_frontdoor_hal_sensor:
+        friendly_name: "Foyer Front Door"
+        device_class: opening
+        value_template: >- 
+          {%- if is_state('sensor.foyer_frontdoor_hal_access_control', '22') -%}
+          true
+          {%- else -%}
+          false
+          {%- endif -%}
+
+automation:
+  - alias: Foyer - motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.foyer_pir_sensor
+        to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.foyer_light_turn_on
+
+  - alias: Foyer - Front Door Opens
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.foyer_frontdoor_hal_sensor
+        to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.foyer_light_turn_on
+
+  - alias: Foyer - no motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.foyer_pir_sensor
+        to: 'off'
+        for:
+          minutes: 1
+    action:
+      - service: script.turn_on
+        entity_id: script.foyer_light_turn_off
+
+script:
+  foyer_light_turn_on:
+    alias: Foyer - turn on lights
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.foyer
+          brightness_pct: 100
+
+  foyer_light_turn_off:
+    alias: Foyer - turn off lights
+    sequence:
+      - service: light.turn_off
+        entity_id: light.foyer

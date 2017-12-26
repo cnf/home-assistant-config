@@ -1,0 +1,16 @@
+logger:
+  default: info
+  logs:
+    homeassistant.loader: info
+    homeassistant.setup: info
+    homeassistant.core: warn
+    homeassistant.helpers.entity: warn
+    homeassistant.components: warn
+    homeassistant.components.zwave: info
+    homeassistant.components.http: info
+    homeassistant.components.sensor: warn
+    homeassistant.components.automation: info
+    homeassistant.components.script: info
+    homeassistant.components.discovery: info
+    plexapi: error
+    phue: warn

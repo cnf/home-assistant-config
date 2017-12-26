@@ -1,0 +1,193 @@
+automation:
+  - alias: Home - unwarranted movement
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.any_movement
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.any_door
+        #to: 'on'
+    condition:
+      condition: or
+      conditions: 
+        - condition: state
+          entity_id: binary_sensor.people_home
+          state: 'off'
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: armed_away
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.alarm
+      - service:  notify.cnf
+        data:
+          title: "*MOVEMENT DETECTED*"
+          message: "Movement was detected, and *noone is home*!"
+
+  - alias: Home - arrive
+    trigger:
+      - platform: zone
+        zone: zone.home
+        event: enter
+        entity_id: device_tracker.milo
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.alarm
+      - service: script.turn_on
+        entity_id: script.lr_wake_up
+      - service:  notify.cnf
+        data:
+          title: "Zone Change"
+          message: "You are arriving *home*"
+
+#  - alias: Arrive Home Evening
+#    trigger:
+#      platform: zone
+#      zone: zone.home
+#      event: enter
+#      entity_id: device_tracker.milo
+#    condition:
+#      condition: sun
+#      after: sunset
+#      after_offset: "-1:00:00"
+#    action:
+#      - service: scene.turn_on
+#        entity_id: scene.evening
+#      - service:  notify.cnf
+#        data:
+#          title: "Zone Change"
+#          message: "You are arriving *home*"
+
+#  - alias: Arrive Home Daytime
+#    trigger:
+#      platform: zone
+#      zone: zone.home
+#      event: enter
+#      entity_id: device_tracker.milo
+#    condition:
+#      condition: sun
+#      before: sunset
+#      before_offset: "-1:00:00"
+#    action:
+#      - service: scene.turn_on
+#        entity_id: scene.daytime
+#      - service:  notify.cnf
+#        data:
+#          title: "Zone Change"
+#          message: "You are arriving *home*"
+
+  - alias: Home - leaving
+    trigger:
+      - platform: zone
+        zone: zone.home
+        event: leave
+        entity_id: device_tracker.milo
+    action:
+      - service: alarm_control_panel.alarm_arm_away
+        entity_id: alarm_control_panel.alarm
+      - service: script.turn_on
+        entity_id: script.power_down_house
+      - service:  notify.cnf
+        data:
+          title: "Zone Change"
+          message: "You are leaving *home*"
+
+  - alias: Home - morning wakeup
+    trigger:
+      - platform: event
+        event_type: zwave.scene_activated
+        event_data:
+          entity_id: zwave.sceneselector
+          scene_id: 3
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.alarm
+      - service: script.turn_on
+        entity_id: script.wake_up_house
+
+  - alias: Home - put to sleep
+    trigger:
+      - platform: event
+        event_type: zwave.scene_activated
+        event_data:
+          entity_id: zwave.sceneselector
+          scene_id: 4
+    action:
+      - service: alarm_control_panel.alarm_arm_night
+        entity_id: alarm_control_panel.alarm
+      - service: script.turn_on
+        entity_id: script.power_down_house
+
+  - alias: Home - is vacant
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.people_home
+        to: 'off'
+    action:
+      - service: alarm_control_panel.alarm_arm_away
+        entity_id: alarm_control_panel.alarm
+      
+  - alias: Home - is not vacant
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.people_home
+        to: 'on'
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.alarm
+      
+
+binary_sensor:
+  - platform: template
+    sensors:
+      people_home:
+        friendly_name: Anyone Home
+        device_class: occupancy
+        entity_id:
+          - device_tracker.milo
+          - device_tracker.milo_b8e7669f8a2f439c9a447fe22256c5a0
+        value_template: >- 
+          {{ is_state('device_tracker.milo', 'home')
+             or is_state('device_tracker.milo_b8e7669f8a2f439c9a447fe22256c5a0', 'home') }}
+
+      any_movement:
+        friendly_name: Any Movemement
+        device_class: motion
+        entity_id:
+          - binary_sensor.mbr_pir_sensor
+          - binary_sensor.lr_pir_sensor
+          - binary_sensor.wc_pir_sensor
+          - binary_sensor.foyer_pir_sensor
+        value_template: >-
+          {{ is_state('binary_sensor.mbr_pir_sensor', 'on')
+             or is_state('binary_sensor.lr_pir_sensor', 'on')
+             or is_state('binary_sensor.foyer_pir_sensor', 'on')
+             or is_state('binary_sensor.wc_pir_sensor', 'on') }}
+  
+      any_door:
+        friendly_name: Any Door
+        device_class: opening
+        entity_id:
+          - binary_sensor.foyer_frontdoor_hal_sensor
+          - binary_sensor.storage_door_hal_sensor
+          - binary_sensor.wc_door_hal_sensor
+        value_template: >-
+          {{ is_state('binary_sensor.foyer_frontdoor_hal_sensor', 'on')
+             or is_state('binary_sensor.storage_door_hal_sensor', 'on')
+             or is_state('binary_sensor.wc_door_hal_sensor', 'on') }}
+
+
+
+script:
+  power_down_house:
+    alias: Home - Power down
+    sequence:
+      - service: light.turn_off
+      - service: script.turn_on
+        entity_id: script.lr_power_down
+
+  wake_up_house:
+    alias: Home - Wake Up
+    sequence:
+      - service: script.turn_on
+        entity_id: script.lr_wake_up

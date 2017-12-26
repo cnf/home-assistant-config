@@ -1,0 +1,70 @@
+homeassistant:
+  customize:
+    light.storage:
+      friendly_name: Storage Light
+    binary_sensor.storage_door_hal_sensor:
+      device_class: opening
+      friendly_name: Storage Door
+    sensor.storage_door_hal_temperature:
+      friendly_name: Storage Door Temperature
+    sensor.storage_door_hal_access_control:
+      friendly_name: Storage Door Access Control
+
+group:
+  storage:
+    name: Storage
+    view: no
+    entities:
+      - light.storage
+      - binary_sensor.storage_door_hal_sensor
+      - sensor.storage_door_hal_temperature
+      #- sensor.storage_door_hal_access_control
+
+
+binary_sensor:
+  - platform: template
+    sensors: 
+      storage_door_hal_sensor:
+        friendly_name: "Storage Door"
+        device_class: opening
+        value_template: >- 
+          {%- if is_state('sensor.storage_door_hal_access_control', '22') -%}
+          true
+          {%- else -%}
+          false
+          {%- endif -%}
+
+automation:
+  - alias: Storage - door opens
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.storage_door_hal_sensor
+        to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.storage_lights_turn_on
+
+  - alias: Storage - door closes
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.storage_door_hal_sensor
+        to: 'off'
+    action:
+      - service: script.turn_on
+        entity_id: script.storage_lights_turn_off
+
+script:
+  storage_lights_turn_on:
+    alias: Storage - light turn on
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.storage
+          brightness_pct: 100
+
+  storage_lights_turn_off:
+    alias: Storage - light turn off
+    sequence:
+      - service: light.turn_off
+        entity_id:
+          - light.storage

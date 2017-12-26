@@ -1,0 +1,25 @@
+recorder:
+  purge_interval: 2
+  purge_keep_days: 30
+history:
+  exclude:
+    domains:
+      - automation
+    entities:
+      - sun.sun
+      - sensor.wc_door_hal_access_control
+      - sensor.foyer_frontdoor_hal_access_control
+
+#      - input_select
+#      - media_player
+#      - input_number
+#      - rest_command
+#      - camera
+#      - notify
+#      - scene
+#      - light
+#      - sun
+#      - tts
+#      - device_tracker
+#      - mqtt
+#      - script

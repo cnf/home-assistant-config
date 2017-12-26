@@ -1,0 +1,45 @@
+telegram_bot:
+  - platform: webhooks
+    api_key: !secret telegram_api
+    parse_mode: markdown
+    allowed_chat_ids:
+      - 211033008
+
+
+automation:
+  - alias: Telegram - bot that reply pong to ping
+    hide_entity: true
+    trigger:
+      platform: event
+      event_type: telegram_command
+      event_data:
+        command: /ping
+    action:
+    - service: notify.cnf
+      data:
+        message: pong
+
+  - alias: Telegram - /Start
+    hide_entity: true
+    trigger:
+      platform: event
+      event_type: telegram_command
+      event_data:
+        command: /start
+    action:
+      service: notify.cnf
+      data:
+        keyboard:
+        - /ping, /location
+        message: commands
+
+script:
+  sent_alarm_notification:
+    alias: Telegram - Alarm Notification
+    sequence:
+      - service: notify.cnf
+        data:
+          message: "*ALARM!*"
+          data:
+            inline_keyboard: 'Confirm:/confirm_alarm'
+      

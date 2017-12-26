@@ -1,0 +1,99 @@
+homeassistant:
+  customize:
+    media_player.samsungtv:
+      friendly_name: Smart TV
+
+group:
+  media:
+    view: yes
+    entities:
+      - media_player.receiver
+      - media_player.TV
+      - media_player.spotify
+      - media_player.plex
+      - media_player.cast
+      - media_player.apple_tv
+      - media_player.media
+      - media_player.shield
+      - remote.apple_tv
+      - sensor.plex
+
+#apple_tv:
+#  - host: 192.168.7.40
+#    login_id: 00000000-0937-ee71-3a1b-e2a30d3a4247
+
+sensor:
+  - platform: plex
+    host: !secret plex_host
+    token: !secret plex_token
+    port: 32400
+    ssl: true
+    verify_ssl: true
+
+media_player:
+  - platform: plex
+    include_non_clients: true
+  - platform: cast
+    host: 192.168.7.50
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+    #aliases:
+  - platform: denonavr
+    host: 192.168.7.80
+    name: receiver
+    show_all_sources: False
+    timeout: 20
+  - platform: samsungtv
+    name: TV
+    host: 192.168.7.60
+    port: 8001
+    mac: f8:3f:51:72:68:5a
+#  - platform: universal
+#    name: Universal Media
+#    children:
+#      - media_player.receiver
+#      - media_player.tv
+#      - media_player.plex
+#      - media_player.spotify
+#    commands:
+#      turn_on:
+#        service: media_player.turn_on
+#        data:
+#          entity_id:
+#            - media_player.receiver
+#            - media_player.TV
+#      turn_of:
+#        service: media_player.turn_of
+#        data:
+#          entity_id:
+#            - media_player.receiver
+#            - media_player.TV
+#      volume_up:
+#        service: media_player.volume_up
+#        data:
+#          entity_id: media_player.receiver
+#      volume_down:
+#        service: media_player.volume_down
+#        data:
+#          entity_id: media_player.receiver
+#      volume_mute:
+#        service: media_player.volume_mute
+#        data:
+#          entity_id: media_player.receiver
+#      volume_set:
+#        service: media_player.volume_set
+#        data_template:
+#          entity_id: media_player.receiver
+#          volume_level: '{{ volume_level }}'
+#      select_source:
+#        service:  media_player.select_source
+#        data_template:
+#          entity_id: media_player.receiver
+#          source: '{{ source }}'
+#    attributes:
+#      state: media_player.receiver
+#      volume_level: media_player.receiver|volume_level
+#      is_volume_muted:  media_player.receiver|is_volume_muted
+#      source: media_player.receiver|source
+#      source_list: media_player.receiver|source_list

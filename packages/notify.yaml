@@ -1,0 +1,9 @@
+notify:
+  - name: cnf
+    platform: telegram
+    chat_id: 211033008
+
+tts:
+  - platform: google
+    cache: true
+    cache_dir: /tmp/tts

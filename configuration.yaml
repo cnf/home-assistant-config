@@ -1,0 +1,36 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: 20
+  unit_system: metric
+  temperature_unit: C
+  time_zone: !secret timezone
+  customize: !include customize.yaml
+  customize_glob:
+    sensor.*_alarm_level:
+      hidden: true
+    sensor.*_alarm_type:
+      hidden: true
+    sensor.*_sourcenodeid:
+      hidden: true
+  packages: !include_dir_named packages
+
+frontend:
+  javascript_version: latest
+
+map:
+
+http:
+  base_url: !secret http_url
+  api_password: !secret http_password
+  use_x_forwarded_for: True
+  ip_ban_enabled: True
+  login_attempts_threshold: 5
+
+config:
+discovery:
+sun:
+
+zone: !include zones.yaml
+group: !include groups.yaml

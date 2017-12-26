@@ -1,0 +1,8 @@
+mqtt:
+  broker: m23.cloudmqtt.com
+  port: 27322
+  username: ha
+  password: !secret mqtt_password
+
+device_tracker:
+  - platform: owntracks

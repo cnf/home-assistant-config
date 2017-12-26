@@ -1,0 +1,105 @@
+homeassistant:
+  customize:
+    group.wc_light_day:
+      hidden: true
+    group.wc_light_night:
+      hidden: true
+    light.wc:
+      friendly_name: WC Light
+    binary_sensor.wc_door_hal_sensor:
+      device_class: opening
+      friendly_name: WC Door
+    binary_sensor.wc_pir_sensor:
+      device_class: motion
+      friendly_name: WC Motion
+    sensor.wc_pir_temperature:
+      friendly_name: WC Temperature
+    sensor.wc_pir_luminance:
+      friendly_name: WC Luminance
+    sensor.wc_door_hal_access_control:
+      friendly_name: WC Door Access Control
+    sensor.wc_pir_burglar:
+      friendly_name: WC PIR Burglar
+
+group:
+  wc_room:
+    name: WC
+    entities:
+      - light.wc
+      - binary_sensor.wc_pir_sensor
+      - binary_sensor.wc_door_hal_sensor
+      - sensor.wc_pir_temperature
+      #- sensor.wc_pir_luminance
+      #- sensor.wc_door_hal_access_control
+
+binary_sensor:
+  - platform: template
+    sensors: 
+      wc_door_hal_sensor:
+        device_class: opening
+        value_template: >- 
+          {%- if is_state('sensor.wc_door_hal_access_control', '22') -%}
+          true
+          {%- else -%}
+          false
+          {%- endif -%}
+
+automation:
+  - alias: WC - motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.wc_pir_sensor
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.wc_door_hal_sensor
+        to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.wc_light_turn_on
+
+  - alias: WC - no motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.wc_pir_sensor
+        to: 'off'
+        for:
+          minutes: 3
+    action:
+      - service: script.turn_on
+        entity_id: script.wc_light_turn_off
+
+script:
+  wc_light_turn_off:
+    alias: WC - light turn off
+    sequence:
+      - service: light.turn_off
+        entity_id: light.wc
+
+  wc_light_turn_on:
+    alias: WC - light turn on
+    sequence:
+      - service: script.turn_on
+        entity_id:
+          - script.wc_light_day
+          - script.wc_light_night
+
+  wc_light_day:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: disarmed
+      - service: light.turn_on
+        data:
+          entity_id: light.wc
+          brightness_pct: 80
+
+  wc_light_night:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+      - service: light.turn_on
+        data:
+          entity_id: light.wc
+          brightness_pct: 30
+          transition: 30

@@ -1,0 +1,7 @@
+logbook:
+  exclude:
+    entities: []
+#      - sun.sun
+
+#   domains:
+#      - sun

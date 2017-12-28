@@ -3,15 +3,10 @@ default_view:
   view: yes
   entities:
     - alarm_control_panel.alarm
-    - input_boolean.home_vacant
-    - input_boolean.home_sleep
-    - sensor.last_motion
-    - sensor.low_battery
     - binary_sensor.smoke
     - binary_sensor.safety
     - binary_sensor.any_movement
     - binary_sensor.people_home
     - binary_sensor.any_door
-    - sensor.us_air_quality_index
-    - sensor.us_air_pollution_level
-    - sensor.us_main_pollutant
+    - group.home_info
+    - group.air_quality_home_card

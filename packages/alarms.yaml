@@ -6,9 +6,9 @@ homeassistant:
     binary_sensor.mbr_smoke_sensor:
       device_class: smoke
       friendly_name: Bedroom Smoke Sensor
-    binary_sensor.place_smoke_sensor:
+    binary_sensor.foyer_smoke_sensor:
       device_class: smoke
-      friendly_name: Place Smoke Sensor
+      friendly_name: Foyer Smoke Sensor
 
 alarm_control_panel:
   - platform: manual
@@ -38,11 +38,11 @@ binary_sensor:
         entity_id:
           - binary_sensor.lr_smoke_sensor
           - binary_sensor.mbr_smoke_sensor
-          - binary_sensor.place_smoke_sensor
+          - binary_sensor.foyer_smoke_sensor
         value_template: >-
           {{ binary_sensor.lr_smoke_sensor or
              binary_sensor.mbr_smoke_sensor or
-             binary_sensor.place_smoke_sensor }}
+             binary_sensor.foyer_smoke_sensor }}
 
 sensor:
   - platform: template

@@ -1,0 +1,74 @@
+homeassistant:
+  customize:
+    script.hall_light_day:
+      hidden: true
+    script.hall_light_night:
+      hidden: true
+    light.hall:
+      friendly_name: Hall Light
+
+group:
+  hall_room:
+    name: Hall
+    entities:
+      - light.hall
+
+#automation:
+#  - alias: Hall - motion
+#    trigger:
+#      - platform: state
+#        entity_id: binary_sensor.wc_pir_sensor
+#        to: 'on'
+#      - platform: state
+#        entity_id: binary_sensor.wc_door_hal_sensor
+#        to: 'on'
+#    action:
+#      - service: script.turn_on
+#        entity_id: script.hall_light_turn_on
+
+#  - alias: Hall - no motion
+#    trigger:
+#      - platform: state
+#        entity_id: binary_sensor.wc_pir_sensor
+#        to: 'off'
+#        for:
+#          minutes: 3
+#    action:
+#      - service: script.turn_on
+#        entity_id: script.hall_light_turn_off
+
+script:
+  hall_light_turn_off:
+    alias: Hall - light turn off
+    sequence:
+      - service: light.turn_off
+        entity_id: light.hall
+
+  hall_light_turn_on:
+    alias: Hall - light turn on
+    sequence:
+      - service: script.turn_on
+        entity_id:
+          - script.hall_light_day
+          - script.hall_light_night
+
+  hall_light_day:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: disarmed
+      - service: light.turn_on
+        data:
+          entity_id: light.hall
+          brightness_pct: 80
+
+  hall_light_night:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+      - service: light.turn_on
+        data:
+          entity_id: light.hall
+          brightness_pct: 30
+          transition: 30

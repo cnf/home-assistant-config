@@ -1,0 +1,74 @@
+homeassistant:
+  customize:
+    script.backroom_light_day:
+      hidden: true
+    script.backroom_light_night:
+      hidden: true
+    light.back_ceiling:
+      friendly_name: Back Room Light
+
+group:
+  backroom_room:
+    name: Back Room
+    entities:
+      - light.back_ceiling
+
+#automation:
+#  - alias: Back Room - motion
+#    trigger:
+#      - platform: state
+#        entity_id: binary_sensor.wc_pir_sensor
+#        to: 'on'
+#      - platform: state
+#        entity_id: binary_sensor.wc_door_hal_sensor
+#        to: 'on'
+#    action:
+#      - service: script.turn_on
+#        entity_id: script.backroom_light_turn_on
+
+#  - alias: Back Room - no motion
+#    trigger:
+#      - platform: state
+#        entity_id: binary_sensor.wc_pir_sensor
+#        to: 'off'
+#        for:
+#          minutes: 3
+#    action:
+#      - service: script.turn_on
+#        entity_id: script.backroom_light_turn_off
+
+script:
+  backroom_light_turn_off:
+    alias: Back Room - light turn off
+    sequence:
+      - service: light.turn_off
+        entity_id: light.back_ceiling
+
+  backroom_light_turn_on:
+    alias: Back Room - light turn on
+    sequence:
+      - service: script.turn_on
+        entity_id:
+          - script.backroom_light_day
+          - script.backroom_light_night
+
+  backroom_light_day:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: disarmed
+      - service: light.turn_on
+        data:
+          entity_id: light.back_ceiling
+          brightness_pct: 80
+
+  backroom_light_night:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+      - service: light.turn_on
+        data:
+          entity_id: light.back_ceiling
+          brightness_pct: 30
+          transition: 30

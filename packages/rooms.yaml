@@ -13,3 +13,4 @@ group:
       - group.wc_room
       - group.storage
       - group.kitchen
+      - group.hall_room

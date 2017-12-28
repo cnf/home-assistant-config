@@ -1,3 +1,11 @@
+group:
+  home_info:
+    view: no
+    name: Home Information
+    entities:
+      - sensor.last_motion
+      - sensor.low_battery
+    
 automation:
   - alias: Home - unwarranted movement
     trigger:
@@ -175,8 +183,6 @@ binary_sensor:
           {{ is_state('binary_sensor.foyer_frontdoor_hal_sensor', 'on')
              or is_state('binary_sensor.storage_door_hal_sensor', 'on')
              or is_state('binary_sensor.wc_door_hal_sensor', 'on') }}
-
-
 
 script:
   power_down_house:

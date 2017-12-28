@@ -1,8 +1,8 @@
 homeassistant:
   customize:
-    group.wc_light_day:
+    script.wc_light_day:
       hidden: true
-    group.wc_light_night:
+    script.wc_light_night:
       hidden: true
     light.wc:
       friendly_name: WC Light

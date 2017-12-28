@@ -1,5 +1,9 @@
 homeassistant:
   customize:
+    light.kitchen_ceiling_1:
+      friendly_name: Kitchen Ceiling bulb 1
+    light.kitchen_ceiling_2:
+      friendly_name: Kitchen Ceiling bulb 2
     binary_sensor.kitchen_pir_sensor:
       device_class: motion
       friendly_name: Kitchen Motion
@@ -28,7 +32,7 @@ group:
       - light.kitchen_ceiling_2
 
 automation:
-  - alias: Turn Kitchen lights on when motion detected
+  - alias: Kitchen - motion
     trigger:
       platform: state
       entity_id: binary_sensor.kitchen_pir_sensor
@@ -37,7 +41,7 @@ automation:
       service: script.turn_on
       entity_id: script.kitchen_lights_turn_on
 
-  - alias: Turn Kitchen lights off when no motion detected
+  - alias: Kitchen - no motion
     trigger:
       platform: state
       entity_id: binary_sensor.kitchen_pir_sensor
@@ -50,7 +54,7 @@ automation:
 
 script:
   kitchen_lights_turn_on:
-    alias: Turn Kitchen lights on
+    alias: Kitchen - light turn on
     sequence:
       - service: light.turn_on
         data:
@@ -58,7 +62,7 @@ script:
           brightness_pct: 100
 
   kitchen_lights_turn_off:
-    alias: Turn Kitchen lights off
+    alias: Kitchen - light turn off
     sequence:
       - service: light.turn_off
         entity_id: group.kitchen_lights

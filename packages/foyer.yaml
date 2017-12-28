@@ -27,6 +27,7 @@ group:
       - light.foyer
       - binary_sensor.foyer_pir_sensor
       - binary_sensor.foyer_frontdoor_hal_sensor
+      - binary_sensor.foyer_smoke_sensor
       - sensor.foyer_frontdoor_hal_temperature
       - sensor.foyer_pir_temperature
       - sensor.foyer_pir_luminance

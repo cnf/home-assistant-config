@@ -90,7 +90,6 @@ group:
       - group.lr_media_backlight
       - group.lr_color_lights
       - light.lr_message
-      - light.lr_ceiling
 
   lr_media_backlight:
     name: TV Backlight
@@ -111,6 +110,7 @@ group:
       - light.lr_tower_left
       - light.lr_tower_right
       - light.lr_pod_right
+      - light.lr_ceiling
 
   lr_power:
     name: Livingroom Power

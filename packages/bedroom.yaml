@@ -2,9 +2,9 @@ homeassistant:
   customize:
     group.bedroom:
       order: 2
-    script.mbr_light_day:
+    script.mbr_light_evening:
       hidden: true
-    script.mbr_light_night:
+    script.mbr_light_sleep:
       hidden: true
     light.mbr_ceiling:
       friendly_name: Ceiling Bedroom
@@ -69,14 +69,33 @@ script:
     sequence:
       - service: script.turn_on
         entity_id: 
-          - script.mbr_light_day
-          - script.mbr_light_night
+          - script.mbr_light_morning
+          - script.mbr_light_evening
+          - script.mbr_light_sleep
 
-  mbr_light_day:
+  mbr_light_morning:
     sequence:
       - condition: state
         entity_id: alarm_control_panel.alarm
         state: disarmed
+      - condition: state
+        entity_id: sun.sun
+        state: 'above_horizon'
+      - service: light.turn_on
+        data:
+          entity_id: light.mbr_ceiling
+          brightness_pct: 100
+          color_temp: 150
+          transition: 3
+
+  mbr_light_evening:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: disarmed
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
       - service: light.turn_on
         data:
           entity_id: light.mbr_ceiling
@@ -84,7 +103,7 @@ script:
           color_temp: 500
           transition: 3
 
-  mbr_light_night:
+  mbr_light_sleep:
     sequence:
       - condition: state
         entity_id: alarm_control_panel.alarm

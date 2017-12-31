@@ -6,36 +6,49 @@ homeassistant:
       hidden: true
     light.back_ceiling:
       friendly_name: Back Room Light
+    binary_sensor.back_door_hal_sensor:
+      friendly_name: Back Room Door
+    sensor.storage_door_hal_temperature:
+      friendly_name: Back Room Temperature
 
 group:
   backroom_room:
     name: Back Room
     entities:
       - light.back_ceiling
+      - binary_sensor.back_door_hal_sensor
+      - sensor.storage_door_hal_temperature
 
-#automation:
-#  - alias: Back Room - motion
-#    trigger:
-#      - platform: state
-#        entity_id: binary_sensor.wc_pir_sensor
-#        to: 'on'
-#      - platform: state
-#        entity_id: binary_sensor.wc_door_hal_sensor
-#        to: 'on'
-#    action:
-#      - service: script.turn_on
-#        entity_id: script.backroom_light_turn_on
+binary_sensor:
+  - platform: template
+    sensors:
+      back_door_hal_sensor:
+        device_class: opening
+        value_template: >-
+          {%- if is_state('sensor.back_door_hal_access_control', '22') -%}
+          true
+          {%- else -%}
+          false
+          {%- endif -%}
 
-#  - alias: Back Room - no motion
-#    trigger:
-#      - platform: state
-#        entity_id: binary_sensor.wc_pir_sensor
-#        to: 'off'
-#        for:
-#          minutes: 3
-#    action:
-#      - service: script.turn_on
-#        entity_id: script.backroom_light_turn_off
+automation:
+  - alias: Back Room - door opens
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.back_door_hal_sensor
+        to: 'on'
+    action:
+      - service: script.turn_on
+        entity_id: script.backroom_light_turn_on
+
+  - alias: Back Room - door opens
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.back_door_hal_sensor
+        to: 'off'
+    action:
+      - service: script.turn_on
+        entity_id: script.backroom_light_turn_off
 
 script:
   backroom_light_turn_off:
@@ -49,26 +62,48 @@ script:
     sequence:
       - service: script.turn_on
         entity_id:
-          - script.backroom_light_day
+          - script.backroom_light_morning
+          - script.backroom_light_evening
           - script.backroom_light_night
 
-  backroom_light_day:
+  backroom_light_morning:
     sequence:
       - condition: state
         entity_id: alarm_control_panel.alarm
         state: disarmed
+      - condition: state
+        entity_id: sun.sun
+        state: 'above_horizon'
       - service: light.turn_on
         data:
-          entity_id: light.back_ceiling
-          brightness_pct: 80
+          entity_id: light.backroom_ceiling
+          brightness_pct: 100
+          color_temp: 150
+          transition: 3
 
-  backroom_light_night:
+  backroom_light_evening:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: disarmed
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - service: light.turn_on
+        data:
+          entity_id: light.backroom_ceiling
+          brightness_pct: 100
+          color_temp: 500
+          transition: 3
+
+  backroom_light_sleep:
     sequence:
       - condition: state
         entity_id: alarm_control_panel.alarm
         state: armed_night
       - service: light.turn_on
         data:
-          entity_id: light.back_ceiling
-          brightness_pct: 30
-          transition: 30
+          entity_id: light.backroom_ceiling
+          brightness_pct: 20
+          color_temp: 500
+          transition: 15

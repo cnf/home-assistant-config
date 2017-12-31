@@ -16,6 +16,8 @@ alarm_control_panel:
     pending_time: 0
     armed_away:
       pending_time: 0
+#    armed_night:
+#      pending_time: 300
 
 binary_sensor:
   - platform: template

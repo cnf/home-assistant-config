@@ -16,8 +16,8 @@ alarm_control_panel:
     pending_time: 0
     armed_away:
       pending_time: 0
-#    armed_night:
-#      pending_time: 300
+    armed_night:
+      pending_time: 300
 
 binary_sensor:
   - platform: template
@@ -30,7 +30,7 @@ binary_sensor:
           - alarm_control_panel.alarm
         value_template: >-
           {{ is_state('alarm_control_panel.alarm', 'triggered') or 
-             binary_sensor.smoke }}
+             states.binary_sensor.smoke }}
 
   - platform: template
     sensors:
@@ -42,9 +42,9 @@ binary_sensor:
           - binary_sensor.mbr_smoke_sensor
           - binary_sensor.foyer_smoke_sensor
         value_template: >-
-          {{ binary_sensor.lr_smoke_sensor or
-             binary_sensor.mbr_smoke_sensor or
-             binary_sensor.foyer_smoke_sensor }}
+          {{ states.binary_sensor.lr_smoke_sensor or
+             states.binary_sensor.mbr_smoke_sensor or
+             states.binary_sensor.foyer_smoke_sensor }}
 
 sensor:
   - platform: template

@@ -29,7 +29,7 @@ http:
   login_attempts_threshold: 5
 
 config:
-discovery:
+#discovery:
 sun:
 
 zone: !include zones.yaml

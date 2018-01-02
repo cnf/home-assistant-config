@@ -85,9 +85,14 @@ script:
 
   wc_light_day:
     sequence:
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: disarmed
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: disarmed
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: pending
       - service: light.turn_on
         data:
           entity_id: light.wc

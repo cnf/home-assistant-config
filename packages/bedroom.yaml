@@ -75,9 +75,14 @@ script:
 
   mbr_light_morning:
     sequence:
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: disarmed
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: disarmed
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: pending
       - condition: state
         entity_id: sun.sun
         state: 'above_horizon'
@@ -90,9 +95,14 @@ script:
 
   mbr_light_evening:
     sequence:
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: disarmed
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: disarmed
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: pending
       - condition: state
         entity_id: sun.sun
         state: 'below_horizon'

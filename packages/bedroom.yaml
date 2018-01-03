@@ -38,7 +38,8 @@ group:
       #- sensor.mbr_pir_luminance
 
 automation:
-  - alias: Bedroom - motion
+  - id: mbr_motion
+    alias: Bedroom - motion
     trigger:
       - platform: state
         entity_id: binary_sensor.mbr_pir_sensor
@@ -47,7 +48,8 @@ automation:
       - service: script.turn_on
         entity_id: script.mbr_light_turn_on
 
-  - alias: Bedroom - no motion
+  - id: mbr_no_motion
+    alias: Bedroom - no motion
     trigger:
       - platform: state
         entity_id: binary_sensor.mbr_pir_sensor
@@ -56,7 +58,61 @@ automation:
       - service: script.turn_on
         entity_id: script.mbr_light_turn_off
 
+  - id: mbr_wake_up_end
+    alias: Bedroom - Wakeup End
+    trigger: 
+      - platform: state
+        entity_id: alarm_control_panel.alarm
+        from: armed_night
+        to: disarmed
+    action:
+      - service: script.turn_on
+        entity_id: script.mbr_morning_wakeup_end
+
+  - id: mbr_wake_up
+    alias: Bedroom - WakeUp
+    trigger:
+      - platform: time
+        hours: 8
+        minutes: 30
+        seconds: 00
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+    action:
+      - service: script.turn_on
+        entity_id: script.mbr_morning_wakeup
+
 script:
+  mbr_morning_wakeup:
+    alias: Bedroom - Morning Wakeup
+    sequence:
+      - service: automation.turn_off
+        entity_id: 
+          - automation.mbr_no_motion
+          - automation.mbr_motion
+      - service: light.turn_on
+        data:
+          entity_id: light.mbr_ceiling
+          brightness_pct: 100
+          color_temp: 150
+          transition: 3
+      - service: script.turn_on
+        entity_id: script.sonos_play_morning
+
+  mbr_morning_wakeup_end:
+    alias: Bedroom - Morning Wakeup End
+    sequence:
+      - service: automation.turn_on
+        entity_id: 
+          - automation.mbr_motion
+          - automation.mbr_no_motion
+      - service: media_player.media_stop
+        entity_id: media_player.bedroom
+      - service: light.turn_off
+        entity_id: light.mbr_ceiling
+
   mbr_light_turn_off:
     alias: Bedroom - turn off lights
     sequence:

@@ -1,11 +1,15 @@
 homeassistant:
   customize:
+    automation.bedroom__motion:
+      friendly_name: Bedroom - foofoo motion
     group.bedroom:
       order: 2
     script.mbr_light_evening:
       hidden: true
     script.mbr_light_sleep:
       hidden: true
+    script.mbr_morning_wake_up:
+      can_cancel: false
     light.mbr_ceiling:
       friendly_name: Ceiling Bedroom
     binary_sensor.mbr_pir_sensor:
@@ -24,11 +28,12 @@ group:
     icon: mdi:hotel
     view: yes
     entities:
-      - group.bedroom_card
+      - group.mbr_card
+      - group.mbr_alarm_clock_card
       - binary_sensor.mbr_smoke_sensor
       - binary_sensor.mbr_pir_sensor
 
-  bedroom_card:
+  mbr_card:
     name: Master Bedroom
     view: no
     entities:
@@ -36,9 +41,16 @@ group:
       #- sensor.mbr_smoke_temperature
       - sensor.mbr_pir_temperature
       #- sensor.mbr_pir_luminance
+
+  mbr_alarm_clock_card:
+    name: Bedroom Alarm Clock
+    view: no
+    entities:
       - input_select.mbr_tune
       - script.mbr_morning_wake_up
       - script.mbr_morning_wake_up_end
+      - automation.mbr_motion
+      - automation.mbr_no_motion
 
 input_select:
   mbr_tune:
@@ -109,30 +121,31 @@ automation:
 script:
   mbr_morning_wake_up:
     alias: Bedroom - Morning Wakeup
-    can_cancel: false
     sequence:
       - service: automation.turn_off
         entity_id: 
-          - automation.mbr_no_motion
-          - automation.mbr_motion
+          - automation.bedroom__no_motion
+          - automation.bedroom__motion
       - service: light.turn_on
         data:
           entity_id: light.mbr_ceiling
           brightness_pct: 100
           color_temp: 150
-          transition: 3
+          transition: 10
       - service: script.sonos_say
         data:
           sonos_entity: media_player.bedroom
           volume: 0.3
           message: 'Good Morning!'
-          delay: '00:00:06'
+          delay: '00:00:03'
+      - delay: '00:00:05'
       - service: script.sonos_say
         data:
           sonos_entity: media_player.bedroom
           volume: 0.3
           message: 'Time to wake up.'
           delay: '00:00:02'
+      - delay: '00:00:03'
 #      - condition: state
 #        entity_id: alarm_control_panel.alarm
 #        state: armed_night
@@ -148,8 +161,8 @@ script:
         entity_id: light.mbr_ceiling
       - service: automation.turn_on
         entity_id: 
-          - automation.mbr_motion
-          - automation.mbr_no_motion
+          - automation.bedroom__no_motion
+          - automation.bedroom__motion
 
   mbr_light_turn_off:
     alias: Bedroom - turn off lights

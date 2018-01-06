@@ -36,6 +36,19 @@ group:
       #- sensor.mbr_smoke_temperature
       - sensor.mbr_pir_temperature
       #- sensor.mbr_pir_luminance
+      - input_select.mbr_tune
+      - script.mbr_morning_wake_up
+      - script.mbr_morning_wake_up_end
+
+input_select:
+  mbr_tune:
+    name: Bedroom Tune
+    options:
+      - Fresh Electronic
+      - Wake Up Happy
+      - None
+    initial: None
+    icon: mdi:speaker
 
 automation:
   - id: mbr_motion
@@ -67,7 +80,7 @@ automation:
         to: disarmed
     action:
       - service: script.turn_on
-        entity_id: script.mbr_morning_wakeup_end
+        entity_id: script.mbr_morning_wake_up_end
 
   - id: mbr_wake_up
     alias: Bedroom - WakeUp
@@ -82,11 +95,21 @@ automation:
         state: armed_night
     action:
       - service: script.turn_on
-        entity_id: script.mbr_morning_wakeup
+        entity_id: script.mbr_morning_wake_up
+
+  - id: mbr_tune_stop
+    trigger:
+      - platform: state
+        entity_id: input_select.mbr_tune
+        to: "None"
+    action:
+      - service: media_player.media_stop
+        entity_id: media_player.bedroom
 
 script:
-  mbr_morning_wakeup:
+  mbr_morning_wake_up:
     alias: Bedroom - Morning Wakeup
+    can_cancel: false
     sequence:
       - service: automation.turn_off
         entity_id: 
@@ -98,20 +121,35 @@ script:
           brightness_pct: 100
           color_temp: 150
           transition: 3
+      - service: script.sonos_say
+        data:
+          sonos_entity: media_player.bedroom
+          volume: 0.3
+          message: 'Good Morning!'
+          delay: '00:00:06'
+      - service: script.sonos_say
+        data:
+          sonos_entity: media_player.bedroom
+          volume: 0.3
+          message: 'Time to wake up.'
+          delay: '00:00:02'
+#      - condition: state
+#        entity_id: alarm_control_panel.alarm
+#        state: armed_night
       - service: script.turn_on
         entity_id: script.sonos_play_morning
 
-  mbr_morning_wakeup_end:
-    alias: Bedroom - Morning Wakeup End
+  mbr_morning_wake_up_end:
+    alias: Bedroom - Cancel Wakeup
     sequence:
-      - service: automation.turn_on
-        entity_id: 
-          - automation.mbr_motion
-          - automation.mbr_no_motion
       - service: media_player.media_stop
         entity_id: media_player.bedroom
       - service: light.turn_off
         entity_id: light.mbr_ceiling
+      - service: automation.turn_on
+        entity_id: 
+          - automation.mbr_motion
+          - automation.mbr_no_motion
 
   mbr_light_turn_off:
     alias: Bedroom - turn off lights

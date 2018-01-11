@@ -6,6 +6,8 @@ homeassistant:
       hidden: true
     light.back_ceiling:
       friendly_name: Back Room Light
+    light.back_bench:
+      friendly_name: Back Room Bench Light
     binary_sensor.back_door_hal_sensor:
       friendly_name: Back Room Door
     sensor.back_door_hal_temperature:
@@ -16,6 +18,7 @@ group:
     name: Back Room
     entities:
       - light.back_ceiling
+      - light.back_bench
       - binary_sensor.back_door_hal_sensor
       - sensor.back_door_hal_temperature
 
@@ -55,7 +58,9 @@ script:
     alias: Back Room - light turn off
     sequence:
       - service: light.turn_off
-        entity_id: light.back_ceiling
+        entity_id: 
+          - light.back_ceiling
+          - light.back_bench
 
   backroom_light_turn_on:
     alias: Back Room - light turn on
@@ -76,7 +81,9 @@ script:
         state: 'above_horizon'
       - service: light.turn_on
         data:
-          entity_id: light.back_ceiling
+          entity_id: 
+            - light.back_ceiling
+            - light.back_bench
           brightness_pct: 100
           color_temp: 150
           transition: 3
@@ -91,7 +98,9 @@ script:
         state: 'below_horizon'
       - service: light.turn_on
         data:
-          entity_id: light.back_ceiling
+          entity_id: 
+            - light.back_ceiling
+            - light.back_bench
           brightness_pct: 100
           color_temp: 500
           transition: 3
@@ -103,7 +112,9 @@ script:
         state: armed_night
       - service: light.turn_on
         data:
-          entity_id: light.back_ceiling
+          entity_id:
+            - light.back_ceiling
+            - light.back_bench
           brightness_pct: 20
           color_temp: 500
           transition: 15

@@ -64,8 +64,10 @@ homeassistant:
       friendly_name: Livingroom UV
     sensor.lr_pir_relative_humidity:
       friendly_name: Livingroom Humidity
+      homebridge_visible: true
     sensor.lr_pir_temperature:
       friendly_name: Livingroom Temperature
+      homebridge_visible: true
 
 group:
   livingroom:

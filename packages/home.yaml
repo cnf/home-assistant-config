@@ -1,3 +1,10 @@
+homeassistant:
+  customize:
+    script.power_down_house:
+      homebridge_visible: true
+    script.wake_up_house:
+      homebridge_visible: true
+
 group:
   home_info:
     view: no

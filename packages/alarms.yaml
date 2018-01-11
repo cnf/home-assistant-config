@@ -1,5 +1,11 @@
 homeassistant:
   customize:
+    alarm_control_panel.alarm:
+      homebridge_visible: true
+    binary_sensor.smoke:
+      homebridge_visible: true
+    binary_sensor.safety:
+      homebridge_visible: true
     binary_sensor.lr_smoke_sensor:
       device_class: smoke
       friendly_name: Livingroom Smoke Sensor

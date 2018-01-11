@@ -1,7 +1,5 @@
 homeassistant:
   customize:
-    automation.bedroom__motion:
-      friendly_name: Bedroom - foofoo motion
     group.bedroom:
       order: 2
     script.mbr_light_evening:
@@ -10,6 +8,10 @@ homeassistant:
       hidden: true
     script.mbr_morning_wake_up:
       can_cancel: false
+      homebridge_visible: true
+    script.mbr_morning_wake_up_end:
+      can_cancel: false
+      homebridge_visible: true
     light.mbr_ceiling:
       friendly_name: Ceiling Bedroom
     binary_sensor.mbr_pir_sensor:
@@ -131,7 +133,7 @@ script:
           entity_id: light.mbr_ceiling
           brightness_pct: 100
           color_temp: 150
-          transition: 10
+          transition: 60
       - service: script.sonos_say
         data:
           sonos_entity: media_player.bedroom

@@ -1,0 +1,147 @@
+media_player:
+  - platform: sonos
+    hosts: 
+      - 192.168.13.71
+group:
+  sonos_card:
+    name: Sonos
+    icon: mdi:speaker
+    view: no
+    entities:
+      - script.sonos_play_url
+      - script.sonos_test_play
+      - automation.sonos__repeat
+      - input_boolean.fresh_electronic_music
+      - input_select.remote
+      - input_select.sonos
+    
+
+input_boolean:
+  fresh_electronic_music:
+    name: Play Fresh Electronic
+    icon: mdi:music
+
+input_select:
+#  remote:
+#    name: Media Center Remote
+#    icon: mdi:remote
+#    options:
+#      - PowerOff
+#      - Watch TV
+#      - Watch Netflix
+#      - Watch Amazon
+#      - Watch Over the Air TV
+#      - Play Sonos
+#      - Play Xbox One
+#      - Play Nintendo Switch
+#      - Play Wii U
+#      - Turn on Receiver
+
+  sonos:
+    name: Sonos
+    icon: mdi:speaker
+    options:
+      - None
+      - Play Fresh Electronic
+      - Play Jazz Music
+      - Play Chill Music
+      - Play Electronic Music
+      - Play Classical Music
+      - Play Adele Music Station
+
+automation:
+  - alias: Sonos - Repeat
+    initial_state: 'off'
+    trigger:
+      - platform: state
+        entity_id: media_player.bedroom
+        to: 'paused'
+    action:
+      - service: media_player.media_play_pause
+        entity_id: media_player.bedroom
+
+  - alias: Media - Play Fresh Electronic
+    trigger:
+      - platform: state
+        entity_id: input_boolean.fresh_electronic_music
+        from: 'off'
+        to: 'on'
+    action:
+    - service: media_player.volume_set
+      entity_id:
+        - media_player.bedroom
+      data:
+        volume_level: '.4'
+    - delay: '00:00:01'
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.bedroom
+        source: 'Fresh Electronic'
+    - service: homeassistant.turn_off
+      entity_id:
+        - input_boolean.classical_music
+        - input_boolean.jazz_music
+        - input_boolean.chill_music
+        - input_boolean.electronic_music
+        - input_boolean.adele_music
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.sonos
+        option: "Play Fresh Electronic"
+
+script:
+  sonos_play_morning:
+    sequence:
+      - service: media_player.volume_set
+        entity_id: media_player.bedroom
+        data:
+          volume_level: '.4'
+      - delay: '00:00:01'
+      - service: media_player.select_source
+        data:
+          entity_id: media_player.bedroom
+          source: 'Wake Up Happy'
+
+  sonos_test_play:
+    sequence:
+      - service: automation.turn_on
+        entity_id: automation.sonos__repeat
+      - service: script.turn_on
+        entity_id: script.sonos_play_url
+
+  sonos_play_url:
+    alias: Sonos Play URL
+    sequence: 
+      - service: media_player.volume_set
+        entity_id: media_player.bedroom
+        data:
+          volume_level: '.4'
+      - service: media_player.play_media
+        entity_id: media_player.bedroom
+        data:
+          media_content_id: 'http://192.168.13.10/hl2.m4a'
+          media_content_type: 'music'
+
+  sonos_say:
+    alias: "Sonos TTS script"
+    sequence:
+     - service: media_player.sonos_snapshot
+       data_template:
+         entity_id: "{{ sonos_entity }}"
+     - service: media_player.sonos_unjoin
+       data_template:
+         entity_id: "{{ sonos_entity }}"
+     - service: media_player.volume_set
+       data_template:
+         entity_id: "{{ sonos_entity }}"
+         volume_level: "{{ volume }}"
+     - service: tts.google_say
+       data_template:
+         entity_id: "{{ sonos_entity }}"
+         message: "{{ message }}"
+     - delay: "{{ delay }}"
+     - service: media_player.sonos_restore
+       data_template:
+         entity_id: "{{ sonos_entity }}"
+
+

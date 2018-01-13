@@ -80,6 +80,7 @@ group:
       - binary_sensor.lr_pir_sensor
       - group.lr_sensors
       - group.lr_power
+      - climate.livingroom_spaceheater
 
   lr_lights:
     name: Lights
@@ -135,6 +136,7 @@ group:
     name: Livingroom Sensors
     view: no
     entities:
+      - climate.livingroom_spaceheater
       #- binary_sensor.lr_pir_sensor
       #- sensor.lr_smoke_temperature
       #- sensor.lr_pir_burglar
@@ -143,24 +145,36 @@ group:
       - sensor.lr_pir_luminance
       #- sensor.lr_pir_ultraviolet
 
-automation:
-  - alias: Livingroom - warmer than 24C
-    trigger: 
-      - platform: numeric_state
-        entity_id: sensor.lr_pir_temperature
-        above: 24.0
-    action:
-      service: switch.turn_off
-      entity_id: switch.lr_heater_pwr_switch
+climate:
+  - platform: generic_thermostat
+    name: Livingroom Spaceheater
+    heater: switch.lr_heater_pwr_switch
+    target_sensor: sensor.lr_pir_temperature
+    min_temp: 18
+    max_temp: 29
+    target_temp: 24
+    cold_tolerance: 0.5
+    keep_alive:
+      minutes: 15
 
-  - alias: Livingroom - colder than 23.5C
-    trigger:
-      - platform: numeric_state
-        entity_id: sensor.lr_pir_temperature
-        below: 23.5
-    action:
-      service: switch.turn_on
-      entity_id: script.lr_heater_turn_on
+#automation:
+#  - alias: Livingroom - warmer than 24C
+#    trigger: 
+#      - platform: numeric_state
+#        entity_id: sensor.lr_pir_temperature
+#        above: 24.0
+#    action:
+#      service: switch.turn_off
+#      entity_id: switch.lr_heater_pwr_switch
+
+#  - alias: Livingroom - colder than 23.5C
+#    trigger:
+#      - platform: numeric_state
+#        entity_id: sensor.lr_pir_temperature
+#        below: 23.5
+#    action:
+#      service: switch.turn_on
+#      entity_id: script.lr_heater_turn_on
 
 script:
   lr_power_down:
@@ -173,6 +187,10 @@ script:
           - switch.lr_desk_speakers_pwr_switch
       - service: script.turn_on
         entity_id: script.lr_light_turn_off
+      - service: climate.set_operation_mode
+        entity_id: climate.livingroom_spaceheater
+        data:
+          operation_mode: "off"
 
   lr_wake_up:
     alias: Livingroom - power up
@@ -183,8 +201,10 @@ script:
         entity_id:
           - switch.lr_desk_pwr_switch
           - switch.lr_desk_speakers_pwr_switch
-      - service: script.turn_on
-        entity_id: script.lr_heater_turn_on
+      - service: climate.set_operation_mode
+        entity_id: climate.livingroom_spaceheater
+        data:
+          operation_mode: "auto"
 
   lr_heater_turn_on:
     alias: Livingroom - heater

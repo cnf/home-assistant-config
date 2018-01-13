@@ -13,7 +13,9 @@ homeassistant:
       can_cancel: false
       homebridge_visible: true
     light.mbr_ceiling:
-      friendly_name: Ceiling Bedroom
+      friendly_name: Bedroom Ceiling Light
+    light.mbr_floor:
+      friendly_name: Bedroom Floor Light
     binary_sensor.mbr_pir_sensor:
       device_class: motion
       friendly_name: Bedroom Motion
@@ -40,6 +42,7 @@ group:
     view: no
     entities:
       - light.mbr_ceiling
+      - light.mbr_floor
       #- sensor.mbr_smoke_temperature
       - sensor.mbr_pir_temperature
       #- sensor.mbr_pir_luminance
@@ -172,6 +175,7 @@ script:
       - service: light.turn_off
         entity_id:
           - light.mbr_ceiling
+          - light.mbr_floor
 
   mbr_light_turn_on:
     alias: Bedroom - turn on lights
@@ -197,7 +201,9 @@ script:
         state: 'above_horizon'
       - service: light.turn_on
         data:
-          entity_id: light.mbr_ceiling
+          entity_id: 
+            - light.mbr_ceiling
+            - light.mbr_floor
           brightness_pct: 100
           color_temp: 150
           transition: 3
@@ -217,7 +223,9 @@ script:
         state: 'below_horizon'
       - service: light.turn_on
         data:
-          entity_id: light.mbr_ceiling
+          entity_id:
+            - light.mbr_ceiling
+            - light.mbr_floor
           brightness_pct: 100
           color_temp: 500
           transition: 3
@@ -229,7 +237,9 @@ script:
         state: armed_night
       - service: light.turn_on
         data:
-          entity_id: light.mbr_ceiling
+          entity_id:
+            #- light.mbr_ceiling
+            - light.mbr_floor
           brightness_pct: 20
           color_temp: 500
           transition: 15

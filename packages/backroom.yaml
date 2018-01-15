@@ -26,7 +26,7 @@ binary_sensor:
   - platform: template
     sensors:
       back_door_hal_sensor:
-        device_class: opening
+        device_class: door
         value_template: >-
           {%- if is_state('sensor.back_door_hal_access_control', '22') -%}
           true

@@ -3,7 +3,7 @@ homeassistant:
     light.foyer:
       friendly_name: Foyer Light
     binary_sensor.foyer_frontdoor_hal_sensor:
-      device_class: opening
+      device_class: door
       friendly_name: Front Door
     sensor.foyer_frontdoor_hal_temperature:
       friendly_name: Front Door Temperature
@@ -39,7 +39,7 @@ binary_sensor:
     sensors: 
       foyer_frontdoor_hal_sensor:
         friendly_name: "Foyer Front Door"
-        device_class: opening
+        device_class: door
         value_template: >- 
           {%- if is_state('sensor.foyer_frontdoor_hal_access_control', '22') -%}
           true

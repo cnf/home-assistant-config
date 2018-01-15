@@ -157,7 +157,7 @@ binary_sensor:
     sensors:
       people_home:
         friendly_name: Anyone Home
-        device_class: occupancy
+        device_class: presence
         entity_id:
           - device_tracker.milo
           - device_tracker.milo_b8e7669f8a2f439c9a447fe22256c5a0
@@ -181,7 +181,7 @@ binary_sensor:
   
       any_door:
         friendly_name: Any Door
-        device_class: opening
+        device_class: door
         entity_id:
           - binary_sensor.foyer_frontdoor_hal_sensor
           - binary_sensor.storage_door_hal_sensor

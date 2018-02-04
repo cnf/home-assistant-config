@@ -167,11 +167,6 @@ binary_sensor:
       any_movement:
         friendly_name: Any Movemement
         device_class: motion
-        entity_id:
-          - binary_sensor.mbr_pir_sensor
-          - binary_sensor.lr_pir_sensor
-          - binary_sensor.wc_pir_sensor
-          - binary_sensor.foyer_pir_sensor
         value_template: >-
           {{ is_state('binary_sensor.mbr_pir_sensor', 'on')
              or is_state('binary_sensor.lr_pir_sensor', 'on')
@@ -181,10 +176,6 @@ binary_sensor:
       any_door:
         friendly_name: Any Door
         device_class: door
-        entity_id:
-          - binary_sensor.foyer_frontdoor_hal_sensor
-          - binary_sensor.storage_door_hal_sensor
-          - binary_sensor.wc_door_hal_sensor
         value_template: >-
           {{ is_state('binary_sensor.foyer_frontdoor_hal_sensor', 'on')
              or is_state('binary_sensor.storage_door_hal_sensor', 'on')

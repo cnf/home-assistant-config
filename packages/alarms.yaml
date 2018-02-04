@@ -31,9 +31,6 @@ binary_sensor:
       safety:
         friendly_name: General Alarm
         device_class: safety
-        entity_id:
-          - binary_sensor.smoke
-          - alarm_control_panel.alarm
         value_template: >-
           {{ is_state('alarm_control_panel.alarm', 'triggered') or 
              states.binary_sensor.smoke }}
@@ -43,10 +40,6 @@ binary_sensor:
       smoke:
         friendly_name: Smoke Alarm
         device_class: smoke
-        entity_id:
-          - binary_sensor.lr_smoke_sensor
-          - binary_sensor.mbr_smoke_sensor
-          - binary_sensor.foyer_smoke_sensor
         value_template: >-
           {{ states.binary_sensor.lr_smoke_sensor or
              states.binary_sensor.mbr_smoke_sensor or

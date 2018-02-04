@@ -86,6 +86,7 @@ group:
     name: Lights
     view: no
     entities:
+      - input_select.lr_scenes
       - scene.daytime
       - scene.evening
       - scene.TV

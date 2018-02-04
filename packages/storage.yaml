@@ -54,17 +54,42 @@ automation:
         entity_id: script.storage_lights_turn_off
 
 script:
-  storage_lights_turn_on:
-    alias: Storage - light turn on
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.storage
-          brightness_pct: 100
-
   storage_lights_turn_off:
     alias: Storage - light turn off
     sequence:
       - service: light.turn_off
         entity_id:
           - light.storage
+
+  storage_lights_turn_on:
+    alias: Storage - light turn on
+    sequence:
+      - service: script.turn_on
+        entity_id:
+          - script.storage_light_day
+          - script.storage_light_night
+
+  storage_light_day:
+    sequence:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: disarmed
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: pending
+      - service: light.turn_on
+        data:
+          entity_id: light.storage
+          brightness_pct: 100
+
+  storage_light_night:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+      - service: light.turn_on
+        data:
+          entity_id: light.storage
+          brightness_pct: 10

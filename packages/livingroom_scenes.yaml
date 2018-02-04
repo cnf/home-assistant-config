@@ -1,6 +1,18 @@
+input_select:
+  lr_scenes:
+    name: Livingroom Scene
+    options:
+      - Daytime
+      - Evening
+      - TV
+      - PC Gaming
+      - F00
+      
 scene:
   - name: Daytime
     entities:
+      input_select.lr_scenes:
+        option: Daytime
       group.lr_media_backlight:
         state: off
       light.lr_pod_right:
@@ -26,6 +38,8 @@ scene:
 
   - name: Evening
     entities:
+      input_select.lr_scenes:
+        option: Evening
       group.lr_media_backlight:
         state: on
         brightness_pct: 70
@@ -57,6 +71,8 @@ scene:
 
   - name: TV
     entities:
+      input_select.lr_scenes:
+        option: TV
       group.lr_media_backlight:
         state: on
         brightness_pct: 50
@@ -84,6 +100,8 @@ scene:
 
   - name: PC Gaming
     entities: 
+      input_select.lr_scenes:
+        option: PC Gaming
       group.lr_media_backlight:
         state: on
         brightness_pct: 70
@@ -113,6 +131,8 @@ scene:
 
   - name: F00
     entities: 
+      input_select.lr_scenes:
+        option: F00
       group.lr_media_backlight:
         state: on
         brightness_pct: 100

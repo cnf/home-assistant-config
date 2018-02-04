@@ -56,13 +56,38 @@ script:
   kitchen_lights_turn_on:
     alias: Kitchen - light turn on
     sequence:
-      - service: light.turn_on
-        data:
-          entity_id: group.kitchen_lights
-          brightness_pct: 100
+      - service: script.turn_on
+        entity_id:
+          - script.kitchen_lights_day
+          - script.kitchen_lights_night
 
   kitchen_lights_turn_off:
     alias: Kitchen - light turn off
     sequence:
       - service: light.turn_off
         entity_id: group.kitchen_lights
+  
+  kitchen_lights_day:
+    sequence:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: disarmed
+        - condition: state
+          entity_id: alarm_control_panel.alarm
+          state: pending
+      - service: light.turn_on
+        data:
+          entity_id: group.kitchen_lights
+          brightness_pct: 100
+  
+  kitchen_lights_night:
+    sequence:
+      - condition: state
+        entity_id: alarm_control_panel.alarm
+        state: armed_night
+      - service: light.turn_on
+        data:
+          entity_id: group.kitchen_lights
+          brightness_pct: 10

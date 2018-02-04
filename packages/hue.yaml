@@ -2,3 +2,5 @@ hue:
   bridges:
     - host: !secret hue_ip
       filename: phue.conf
+    - host: 192.168.13.198
+      filename: phue2.conf

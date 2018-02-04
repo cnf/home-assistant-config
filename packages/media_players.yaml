@@ -7,6 +7,7 @@ group:
   media:
     view: yes
     entities:
+      - group.sonos_card
       - media_player.receiver
       - media_player.TV
       - media_player.spotify
@@ -15,6 +16,7 @@ group:
       - media_player.apple_tv
       - media_player.media
       - media_player.shield
+      - media_player.bedroom
       - remote.apple_tv
       - sensor.plex
 
@@ -32,23 +34,24 @@ sensor:
 
 media_player:
   - platform: plex
+    entity_namespace: 'plex'
     include_non_clients: true
-  - platform: cast
-    host: 192.168.7.50
+#  - platform: cast
+#    host: 192.168.7.50
   - platform: spotify
     client_id: !secret spotify_client_id
     client_secret: !secret spotify_client_secret
     #aliases:
-  - platform: denonavr
-    host: 192.168.7.80
-    name: receiver
-    show_all_sources: False
-    timeout: 20
-  - platform: samsungtv
-    name: TV
-    host: 192.168.7.60
-    port: 8001
-    mac: f8:3f:51:72:68:5a
+#  - platform: denonavr
+#    host: 192.168.7.80
+#    name: receiver
+#    show_all_sources: False
+#    timeout: 20
+#  - platform: samsungtv
+#    name: TV
+#    host: 192.168.7.60
+#    port: 8001
+#    mac: f8:3f:51:72:68:5a
 #  - platform: universal
 #    name: Universal Media
 #    children:

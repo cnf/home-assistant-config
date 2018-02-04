@@ -14,3 +14,4 @@ logger:
     homeassistant.components.discovery: info
     plexapi: error
     phue: warn
+    soco: debug

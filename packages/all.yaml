@@ -7,6 +7,7 @@ group:
     name: ALL
     view: yes
     entities:
+      - scene.f00
       - group.all_switches
       - group.all_lights
       - group.all_scenes

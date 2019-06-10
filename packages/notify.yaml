@@ -4,6 +4,7 @@ notify:
     chat_id: 211033008
 
 tts:
-  - platform: google
+  - platform: google_translate
+    language: 'en'
     cache: true
     cache_dir: /tmp/tts

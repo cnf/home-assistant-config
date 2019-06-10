@@ -1,0 +1,6 @@
+sensor.lr_smoke_power_management:
+  ignored: false
+  polling_intensity: 21600
+sensor.mbr_smoke_power_management:
+  ignored: false
+  polling_intensity: 3600

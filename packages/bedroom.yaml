@@ -1,51 +1,37 @@
 homeassistant:
   customize:
-    group.bedroom:
-      order: 2
-    script.mbr_light_evening:
-      hidden: true
-    script.mbr_light_sleep:
-      hidden: true
-    script.mbr_morning_wake_up:
-      can_cancel: false
-      homebridge_visible: true
-    script.mbr_morning_wake_up_end:
-      can_cancel: false
-      homebridge_visible: true
-    light.mbr_ceiling:
-      friendly_name: Bedroom Ceiling Light
-    light.mbr_floor:
-      friendly_name: Bedroom Floor Light
-    binary_sensor.mbr_pir_sensor:
-      device_class: motion
-      friendly_name: Bedroom Motion
-    sensor.mbr_pir_temperature:
-      friendly_name: Bedroom Temperature
-    sensor.mbr_pir_luminance:
-      friendly_name: Bedroom Luminance
-    sensor.mbr_smoke_temperature:
-      friendly_name: Bedroom Temperature (SA)
+#    script.mbr_morning_wake_up:
+#      can_cancel: false
+#    script.mbr_morning_wake_up_end:
+#      can_cancel: false
 
-group:
-  bedroom:
+light:
+  - platform: group
     name: Bedroom
-    icon: mdi:hotel
-    view: yes
-    entities:
-      - group.mbr_card
-      - group.mbr_alarm_clock_card
-      - binary_sensor.mbr_smoke_sensor
-      - binary_sensor.mbr_pir_sensor
-
-  mbr_card:
-    name: Master Bedroom
-    view: no
     entities:
       - light.mbr_ceiling
       - light.mbr_floor
-      #- sensor.mbr_smoke_temperature
-      - sensor.mbr_pir_temperature
-      #- sensor.mbr_pir_luminance
+
+group:
+#  bedroom:
+#    name: Bedroom
+#    icon: mdi:hotel
+#    view: yes
+#    entities:
+#      - group.mbr_card
+#      - group.mbr_alarm_clock_card
+#      - binary_sensor.mbr_smoke_sensor
+#      - binary_sensor.mbr_pir_sensor
+
+#  mbr_card:
+#    name: Master Bedroom
+#    view: no
+#    entities:
+#      - light.mbr_ceiling
+#      - light.mbr_floor
+#      #- sensor.mbr_smoke_temperature
+#      - sensor.mbr_pir_temperature
+#      #- sensor.mbr_pir_luminance
 
   mbr_alarm_clock_card:
     name: Bedroom Alarm Clock
@@ -57,36 +43,38 @@ group:
       - automation.mbr_motion
       - automation.mbr_no_motion
 
-input_select:
-  mbr_tune:
-    name: Bedroom Tune
-    options:
-      - Fresh Electronic
-      - Wake Up Happy
-      - None
-    initial: None
-    icon: mdi:speaker
+#input_select:
+#  mbr_tune:
+#    name: Bedroom Tune
+#    options:
+#      - Fresh Electronic
+#      - Wake Up Happy
+#      - None
+#    initial: None
+#    icon: mdi:speaker
 
 automation:
-  - id: mbr_motion
-    alias: Bedroom - motion
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.mbr_pir_sensor
-        to: 'on'
-    action:
-      - service: script.turn_on
-        entity_id: script.mbr_light_turn_on
+#  - id: mbr_motion
+#    initial_state: 'false'
+#    alias: Bedroom - motion
+#    trigger:
+#      - platform: state
+#        entity_id: binary_sensor.mbr_pir_sensor
+#        to: 'on'
+#    action:
+#      - service: script.turn_on
+#        entity_id: script.mbr_light_turn_on
 
-  - id: mbr_no_motion
-    alias: Bedroom - no motion
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.mbr_pir_sensor
-        to: 'off'
-    action:
-      - service: script.turn_on
-        entity_id: script.mbr_light_turn_off
+#  - id: mbr_no_motion
+#    initial_state: 'false'
+#    alias: Bedroom - no motion
+#    trigger:
+#      - platform: state
+#        entity_id: binary_sensor.mbr_pir_sensor
+#        to: 'off'
+#    action:
+#      - service: script.turn_on
+#        entity_id: script.mbr_light_turn_off
 
   - id: mbr_wake_up_end
     alias: Bedroom - Wakeup End
@@ -103,9 +91,7 @@ automation:
     alias: Bedroom - WakeUp
     trigger:
       - platform: time
-        hours: 8
-        minutes: 30
-        seconds: 00
+        at: "08:00:00"
     condition:
       - condition: state
         entity_id: alarm_control_panel.alarm
@@ -129,8 +115,8 @@ script:
     sequence:
       - service: automation.turn_off
         entity_id: 
-          - automation.bedroom__no_motion
-          - automation.bedroom__motion
+          - automation.bedroom_no_motion
+          - automation.bedroom_motion
       - service: light.turn_on
         data:
           entity_id: light.mbr_ceiling
@@ -166,8 +152,8 @@ script:
         entity_id: light.mbr_ceiling
       - service: automation.turn_on
         entity_id: 
-          - automation.bedroom__no_motion
-          - automation.bedroom__motion
+          - automation.bedroom_no_motion
+          - automation.bedroom_motion
 
   mbr_light_turn_off:
     alias: Bedroom - turn off lights

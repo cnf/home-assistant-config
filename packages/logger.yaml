@@ -12,6 +12,7 @@ logger:
     homeassistant.components.automation: info
     homeassistant.components.script: info
     homeassistant.components.discovery: info
-    plexapi: error
     phue: warn
     soco: debug
+#    homeassistant.components.homekit: debug
+#    pyhap: debug

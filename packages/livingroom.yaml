@@ -1,162 +1,124 @@
 homeassistant:
   customize:
-    group.livingroom:
-      order: 1
-    script.lr_light_day:
-      hidden: true
-    script.lr_light_night:
-      hidden: true
-    light.lr_tower_right:
-      friendly_name: Tower Right
-    light.lr_tower_left:
-      friendly_name: Tower Left
-    light.lr_pod_right:
-      friendly_name: Pod Back
-    light.lr_message:
-      friendly_name: Messenger
-    light.lr_ceiling:
-      friendly_name: Ceiling
-    light.lr_media_right:
-      friendly_name: TV Right
-    light.lr_media_left:
-      friendly_name: TV Left
-    light.lr_media_strip:
-      friendly_name: TV Lightstrip
-    binary_sensor.lr_smoke_sensor:
-      device_class: smoke
-      friendly_name: Smoke Sensor
-    sensor.lr_smoke_temperature:
-      friendly_name: Livingroom Temperature (SA)
-    sensor.lr_media_pwr_power:
-      friendly_name: Media Power
-    sensor.lr_media_pwr_energy:
-      friendly_name: Media Energy
-    switch.lr_media_pwr_switch:
-      friendly_name: Media Switch
+#    binary_sensor.lr_smoke_sensor:
+#      device_class: smoke
+#    binary_sensor.lr_pir_sensor:
+#      device_class: motion
+#    sensor.lr_pir_relative_humidity:
+#      device_class: humidity
+#    sensor.lr_pir_temperature:
+#      device_class: temperature
+#    sensor.lr_pir_luminance:
+#      device_class: luminance
+#    sensor.climate_pwr_power:
+#      device_class: power
+#    sensor.lr_media_pwr_power:
+#      device_class: power
+#    sensor.lr_desk_pwr_power:
+#      device_class: power
+#    sensor.lr_desk_speakers_pwr_power:
+#      device_class: power
 
-    sensor.lr_desk_pwr_power:
-      friendly_name: Desk Monitors Power
-    sensor.lr_desk_pwr_energy:
-      friendly_name: Desk Monitors Energy
-    switch.lr_desk_pwr_switch:
-      friendly_name: Desk Monitors Switch
-    sensor.lr_desk_speakers_pwr_power:
-      friendly_name: Desk Speakers Power
-    sensor.lr_desk_speakers_pwr_energy:
-      friendly_name: Desk Speakers Energy
-    switch.lr_desk_speakers_pwr_switch:
-      friendly_name: Desk Speakers Switch
-
-    sensor.lr_heater_pwr_power:
-      friendly_name: Heater Power
-    sensor.lr_heater_pwr_energy:
-      friendly_name: Heater Energy
-    switch.lr_heater_pwr_switch:
-      friendly_name: Heater Switch
-    binary_sensor.lr_pir_sensor:
-      friendly_name: Livingroom Motion
-      device_class: motion
-    sensor.lr_pir_burglar:
-      friendly_name: Livingroom Burglar
-    sensor.lr_pir_luminance:
-      friendly_name: Livingroom Luminance
-    sensor.lr_pir_ultraviolet:
-      friendly_name: Livingroom UV
-    sensor.lr_pir_relative_humidity:
-      friendly_name: Livingroom Humidity
-      homebridge_visible: true
-    sensor.lr_pir_temperature:
-      friendly_name: Livingroom Temperature
-      homebridge_visible: true
-
-group:
-  livingroom:
-    name: Living Room
-    icon: mdi:youtube-tv
-    view: yes
+light:
+  - platform: group
+    name: Livingroom Lights
     entities:
-      - group.lr_lights
-      - binary_sensor.lr_smoke_sensor
-      - binary_sensor.lr_pir_sensor
-      - group.lr_sensors
-      - group.lr_power
-      - climate.livingroom_spaceheater
-
-  lr_lights:
-    name: Lights
-    view: no
-    entities:
-      - input_select.lr_scenes
-      - scene.daytime
-      - scene.evening
-      - scene.TV
-      - scene.pc_gaming
-      - group.lr_media_backlight
-      - group.lr_color_lights
       - light.lr_message
-
-  lr_media_backlight:
-    name: TV Backlight
-    view: no
-    #control: hidden
-    entities:
-      - light.lr_media_left
-      - light.lr_media_strip
-      - light.lr_media_right
-
-  lr_color_lights:
-    name: All Livingroom Color Lights
-    view: no
-    entities:
-      - light.lr_media_left
-      - light.lr_media_strip
-      - light.lr_media_right
       - light.lr_tower_left
       - light.lr_tower_right
       - light.lr_pod_right
+      - light.lr_tvtable
+
+  - platform: group
+    name: TV Backlight
+    entities:
+      - light.lr_media_left
+      - light.lr_media_strip
+      - light.lr_media_right
+
+  - platform: group
+    name: Livingroom Color Lights
+    entities:
+      - light.tv_backlight
+      - light.livingroom_lights
       - light.lr_ceiling
 
-  lr_power:
-    name: Livingroom Power
-    view: no
-    entities:
-      #- switch.lr_media_pwr_switch
-      - sensor.lr_media_pwr_power
-      - sensor.lr_media_pwr_energy
-      - switch.lr_desk_pwr_switch
-      - sensor.lr_desk_pwr_power
-      - sensor.lr_desk_pwr_energy
-      - switch.lr_desk_speakers_pwr_switch
-      - sensor.lr_desk_speakers_pwr_power
-      - sensor.lr_desk_speakers_pwr_energy
-      - switch.lr_heater_pwr_switch
-      - sensor.lr_heater_pwr_power
-      - sensor.lr_heater_pwr_energy
+#group:
+#  livingroom:
+#    name: Living Room
+#    icon: mdi:youtube-tv
+#    view: yes
+#    entities:
+#      - light.livingroom_lights
+#      - binary_sensor.lr_smoke_sensor
+#      - binary_sensor.lr_pir_sensor
+#      - group.lr_sensors
+#      - group.lr_power
+#      - climate.livingroom_spaceheater
 
-  lr_sensors:
-    name: Livingroom Sensors
-    view: no
-    entities:
-      - climate.livingroom_spaceheater
-      #- binary_sensor.lr_pir_sensor
-      #- sensor.lr_smoke_temperature
-      #- sensor.lr_pir_burglar
-      - sensor.lr_pir_relative_humidity
-      - sensor.lr_pir_temperature
-      - sensor.lr_pir_luminance
-      #- sensor.lr_pir_ultraviolet
+#  lr_lights:
+#    name: Lights
+#    view: no
+#    entities:
+#      - light.lr_ceiling
+#      - light.tv_backlight
+#      - light.livingroom_lights      
+
+#  lr_power:
+#    name: Livingroom Power
+#    view: no
+#    entities:
+#      #- switch.lr_media_pwr_switch
+#      - sensor.lr_media_pwr_power
+#      - sensor.lr_media_pwr_energy
+#      - switch.lr_desk_pwr_switch
+#      - sensor.lr_desk_pwr_power
+#      - sensor.lr_desk_pwr_energy
+#      - switch.lr_desk_speakers_pwr_switch
+#      - sensor.lr_desk_speakers_pwr_power
+#      - sensor.lr_desk_speakers_pwr_energy
+#      - switch.lr_heater_pwr_switch
+#      - sensor.lr_heater_pwr_power
+#      - sensor.lr_heater_pwr_energy
+
+#  lr_sensors:
+#    name: Livingroom Sensors
+#    view: no
+#    entities:
+#      - climate.livingroom_spaceheater
+#      #- binary_sensor.lr_pir_sensor
+#      #- sensor.lr_smoke_temperature
+#      #- sensor.lr_pir_burglar
+#      - sensor.lr_pir_relative_humidity
+#      - sensor.lr_pir_temperature
+#      - sensor.lr_pir_luminance
+#      #- sensor.lr_pir_ultraviolet
 
 climate:
+#  - platform: generic_thermostat
+#    name: Livingroom Climate
+#    heater: switch.climate_pwr_switch
+#    target_sensor: sensor.lr_pir_temperature
+#    min_temp: 18
+#    max_temp: 29
+#    target_temp: 24
+#    cold_tolerance: 0.5
+#    keep_alive:
+#      minutes: 15
+
   - platform: generic_thermostat
-    name: Livingroom Spaceheater
-    heater: switch.lr_heater_pwr_switch
+    name: Livingroom
+    heater: switch.climate_pwr_switch
+    ac_mode: true
     target_sensor: sensor.lr_pir_temperature
-    min_temp: 18
-    max_temp: 29
+    initial_operation_mode: auto
+    cold_tolerance: 1
+    hot_tolerance: 1
+    min_temp: 19
+    max_temp: 26
     target_temp: 24
-    cold_tolerance: 0.5
     keep_alive:
-      minutes: 15
+      minutes: 1
 
 #automation:
 #  - alias: Livingroom - warmer than 24C
@@ -183,15 +145,15 @@ script:
     sequence:
       - service: switch.turn_off
         entity_id:
-          - switch.lr_heater_pwr_switch
+          - switch.climate_pwr_switch
           - switch.lr_desk_pwr_switch
           - switch.lr_desk_speakers_pwr_switch
       - service: script.turn_on
         entity_id: script.lr_light_turn_off
-      - service: climate.set_operation_mode
-        entity_id: climate.livingroom_spaceheater
-        data:
-          operation_mode: "off"
+      - service: climate.turn_off
+        entity_id: climate.livingroom
+#        data:
+#          operation_mode: "off"
 
   lr_wake_up:
     alias: Livingroom - power up
@@ -202,23 +164,23 @@ script:
         entity_id:
           - switch.lr_desk_pwr_switch
           - switch.lr_desk_speakers_pwr_switch
-      - service: climate.set_operation_mode
-        entity_id: climate.livingroom_spaceheater
-        data:
-          operation_mode: "auto"
+      - service: climate.turn_on
+        entity_id: climate.livingroom
+#        data:
+#          operation_mode: "auto"
 
-  lr_heater_turn_on:
-    alias: Livingroom - heater
-    sequence:
-      - condition: numeric_state
-        entity_id: sensor.lr_pir_temperature
-        below: 24.0
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: disarmed
-      - service: switch.turn_on
-        entity_id:
-          - switch.lr_heater_pwr_switch
+#  lr_heater_turn_on:
+#    alias: Livingroom - heater
+#    sequence:
+#      - condition: numeric_state
+#        entity_id: sensor.lr_pir_temperature
+#        below: 24.0
+#      - condition: state
+#        entity_id: alarm_control_panel.alarm
+#        state: disarmed
+#      - service: switch.turn_on
+#        entity_id:
+#          - switch.lr_heater_pwr_switch
 
   lr_light_turn_off:
     alias: Livingroom - lights turn off

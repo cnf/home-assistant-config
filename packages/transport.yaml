@@ -1,16 +1,16 @@
 homeassistant:
   customize:
-    group.transport:
-      order: 6
+#    group.transport:
+#      order: 6
     sensor.veloantwerpen_73d91e4b9e877126ab596a46d5cff60d:
       friendly_name: Velo AZ Monica 
 
-group:
-  transport:
-    icon: mdi:subway-variant
-    view: no
-    entities:
-      - sensor.veloantwerpen_73d91e4b9e877126ab596a46d5cff60d
+#group:
+#  transport:
+#    icon: mdi:subway-variant
+#    view: no
+#    entities:
+#      - sensor.veloantwerpen_73d91e4b9e877126ab596a46d5cff60d
 
 sensor:
   - platform: citybikes

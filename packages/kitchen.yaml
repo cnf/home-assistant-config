@@ -1,93 +1,78 @@
-homeassistant:
-  customize:
-    light.kitchen_ceiling_1:
-      friendly_name: Kitchen Ceiling bulb 1
-    light.kitchen_ceiling_2:
-      friendly_name: Kitchen Ceiling bulb 2
-    binary_sensor.kitchen_pir_sensor:
-      device_class: motion
-      friendly_name: Kitchen Motion
-    sensor.kitchen_pir_temperature:
-      friendly_name: Kitchen Temperature 
-    sensor.kitchen_pir_luminance:
-      friendly_name: Kitchen Luminance
-    sensor.kitchen_pir_burglar:
-      friendly_name: Kitchen PIR Burglar
-
-group:
-  kitchen:
+light:
+  - platform: group
     name: Kitchen
-    view: no
-    entities:
-      - group.kitchen_lights
-      - binary_sensor.kitchen_pir_sensor
-      - sensor.kitchen_pir_temperature
-      - sensor.kitchen_pir_luminance
-
-  kitchen_lights:
-    name: Kitchen Lights
-    view: no
     entities:
       - light.kitchen_ceiling_1
       - light.kitchen_ceiling_2
+#group:
+#  kitchen:
+#    name: Kitchen
+#    view: no
+#    entities:
+#      - light.kitchen
+#      - binary_sensor.kitchen_pir_sensor
+#      - sensor.kitchen_pir_temperature
+#      - sensor.kitchen_pir_luminance
 
-automation:
-  - alias: Kitchen - motion
-    trigger:
-      platform: state
-      entity_id: binary_sensor.kitchen_pir_sensor
-      to: 'on'
-    action:
-      service: script.turn_on
-      entity_id: script.kitchen_lights_turn_on
-
-  - alias: Kitchen - no motion
-    trigger:
-      platform: state
-      entity_id: binary_sensor.kitchen_pir_sensor
-      to: 'off'
-      #for:
-      #  minutes: 1
-    action:
-      service: script.turn_on
-      entity_id: script.kitchen_lights_turn_off
-
-script:
-  kitchen_lights_turn_on:
-    alias: Kitchen - light turn on
-    sequence:
-      - service: script.turn_on
-        entity_id:
-          - script.kitchen_lights_day
-          - script.kitchen_lights_night
-
-  kitchen_lights_turn_off:
-    alias: Kitchen - light turn off
-    sequence:
-      - service: light.turn_off
-        entity_id: group.kitchen_lights
-  
-  kitchen_lights_day:
-    sequence:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: alarm_control_panel.alarm
-          state: disarmed
-        - condition: state
-          entity_id: alarm_control_panel.alarm
-          state: pending
-      - service: light.turn_on
-        data:
-          entity_id: group.kitchen_lights
-          brightness_pct: 100
-  
-  kitchen_lights_night:
-    sequence:
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: armed_night
-      - service: light.turn_on
-        data:
-          entity_id: group.kitchen_lights
-          brightness_pct: 10
+#automation:
+#  - alias: Kitchen - motion
+#    initial_state: false
+#    trigger:
+#      platform: state
+#      entity_id: binary_sensor.kitchen_pir_sensor
+#      to: 'on'
+#    action:
+#      service: script.turn_on
+#      entity_id: script.kitchen_lights_turn_on
+#
+#  - alias: Kitchen - no motion
+#    initial_state: false
+#    trigger:
+#      platform: state
+#      entity_id: binary_sensor.kitchen_pir_sensor
+#      to: 'off'
+#      #for:
+#      #  minutes: 1
+#    action:
+#      service: script.turn_on
+#      entity_id: script.kitchen_lights_turn_off
+#
+#script:
+#  kitchen_lights_turn_on:
+#    alias: Kitchen - light turn on
+#    sequence:
+#      - service: script.turn_on
+#        entity_id:
+#          - script.kitchen_lights_day
+#          - script.kitchen_lights_night
+#
+#  kitchen_lights_turn_off:
+#    alias: Kitchen - light turn off
+#    sequence:
+#      - service: light.turn_off
+#        entity_id: group.kitchen_lights
+#  
+#  kitchen_lights_day:
+#    sequence:
+#      - condition: or
+#        conditions:
+#        - condition: state
+#          entity_id: alarm_control_panel.alarm
+#          state: disarmed
+#        - condition: state
+#          entity_id: alarm_control_panel.alarm
+#          state: pending
+#      - service: light.turn_on
+#        data:
+#          entity_id: group.kitchen_lights
+#          brightness_pct: 100
+#  
+#  kitchen_lights_night:
+#    sequence:
+#      - condition: state
+#        entity_id: alarm_control_panel.alarm
+#        state: armed_night
+#      - service: light.turn_on
+#        data:
+#          entity_id: group.kitchen_lights
+#          brightness_pct: 10

@@ -1,0 +1,36 @@
+homekit:
+  auto_start: False
+  ip_address: !secret ip_self
+  #safe_mode: true
+  filter:
+    include_domains:
+      - alarm_control_panel
+      - climate
+    include_entities:
+      - binary_sensor.safety
+      - binary_sensor.smoke
+      #- sensor.mbr_pir_temperature
+      #- sensor.lr_pir_relative_humidity
+      - scene.daytime
+      - scene.evening
+      - scene.tv
+      - light.kitchen
+      - light.bedroom
+      - light.hangar_55
+      - light.foyer
+      - light.hall
+      - light.wc
+      - light.storage
+      - light.living_room
+      - light.tv_backlight
+      
+
+automation:
+  - alias: 'Start HomeKit'
+    trigger:
+      - platform: event
+        event_type: zwave.network_ready
+      - platform: event
+        event_type: zwave.network_complete
+    action:
+      - service: homekit.start

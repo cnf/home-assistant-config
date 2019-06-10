@@ -1,17 +1,9 @@
-homeassistant:
-  customize:
-    script.power_down_house:
-      homebridge_visible: true
-    script.wake_up_house:
-      homebridge_visible: true
-
-group:
-  home_info:
-    view: no
-    name: Home Information
-    entities:
-      - sensor.last_motion
-      - sensor.low_battery
+#homeassistant:
+#  customize:
+#    script.power_down_house:
+#      homebridge_visible: true
+#    script.wake_up_house:
+#      homebridge_visible: true
     
 automation:
   - alias: Home - unwarranted movement
@@ -50,10 +42,10 @@ automation:
         entity_id: alarm_control_panel.alarm
       - service: script.turn_on
         entity_id: script.lr_wake_up
-      - service:  notify.cnf
-        data:
-          title: "Zone Change"
-          message: "You are arriving *home*"
+#      - service:  notify.cnf
+#        data:
+#          title: "Zone Change"
+#          message: "You are arriving *home*"
 
 #  - alias: Arrive Home Evening
 #    trigger:
@@ -104,36 +96,36 @@ automation:
         entity_id: alarm_control_panel.alarm
       - service: script.turn_on
         entity_id: script.power_down_house
-      - service:  notify.cnf
-        data:
-          title: "Zone Change"
-          message: "You are leaving *home*"
+#      - service:  notify.cnf
+#        data:
+#          title: "Zone Change"
+#          message: "You are leaving *home*"
 
-  - alias: Home - morning wakeup
-    trigger:
-      - platform: event
-        event_type: zwave.scene_activated
-        event_data:
-          entity_id: zwave.sceneselector
-          scene_id: 3
-    action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.alarm
-      - service: script.turn_on
-        entity_id: script.wake_up_house
+#  - alias: Home - morning wakeup
+#    trigger:
+#      - platform: event
+#        event_type: zwave.scene_activated
+#        event_data:
+#          entity_id: zwave.sceneselector
+#          scene_id: 3
+#    action:
+#      - service: alarm_control_panel.alarm_disarm
+#        entity_id: alarm_control_panel.alarm
+#      - service: script.turn_on
+#        entity_id: script.wake_up_house
 
-  - alias: Home - put to sleep
-    trigger:
-      - platform: event
-        event_type: zwave.scene_activated
-        event_data:
-          entity_id: zwave.sceneselector
-          scene_id: 4
-    action:
-      - service: alarm_control_panel.alarm_arm_night
-        entity_id: alarm_control_panel.alarm
-      - service: script.turn_on
-        entity_id: script.power_down_house
+#  - alias: Home - put to sleep
+#    trigger:
+#      - platform: event
+#        event_type: zwave.scene_activated
+#        event_data:
+#          entity_id: zwave.sceneselector
+#          scene_id: 4
+#    action:
+#      - service: alarm_control_panel.alarm_arm_night
+#        entity_id: alarm_control_panel.alarm
+#      - service: script.turn_on
+#        entity_id: script.power_down_house
 
   - alias: Home - is vacant
     trigger:

@@ -1,20 +1,6 @@
-media_player:
-  - platform: sonos
-    hosts: 
-      - 192.168.13.71
-group:
-  sonos_card:
-    name: Sonos
-    icon: mdi:speaker
-    view: no
-    entities:
-      - script.sonos_play_url
-      - script.sonos_test_play
-      - automation.sonos__repeat
-      - input_boolean.fresh_electronic_music
-      - input_select.remote
-      - input_select.sonos
-    
+sonos:
+  media_player:
+    hosts: 192.168.13.71
 
 input_boolean:
   fresh_electronic_music:
@@ -51,7 +37,7 @@ input_select:
 
 automation:
   - alias: Sonos - Repeat
-    initial_state: 'off'
+    initial_state: off
     trigger:
       - platform: state
         entity_id: media_player.bedroom
@@ -102,45 +88,45 @@ script:
           entity_id: media_player.bedroom
           source: 'Wake Up Happy'
 
-  sonos_test_play:
-    sequence:
-      - service: automation.turn_on
-        entity_id: automation.sonos__repeat
-      - service: script.turn_on
-        entity_id: script.sonos_play_url
+#  sonos_test_play:
+#    sequence:
+#      - service: automation.turn_on
+#        entity_id: automation.sonos_repeat
+#      - service: script.turn_on
+#        entity_id: script.sonos_play_url
 
-  sonos_play_url:
-    alias: Sonos Play URL
-    sequence: 
-      - service: media_player.volume_set
-        entity_id: media_player.bedroom
-        data:
-          volume_level: '.4'
-      - service: media_player.play_media
-        entity_id: media_player.bedroom
-        data:
-          media_content_id: 'http://192.168.13.10/hl2.m4a'
-          media_content_type: 'music'
+#  sonos_play_url:
+#    alias: Sonos Play URL
+#    sequence: 
+#      - service: media_player.volume_set
+#        entity_id: media_player.bedroom
+#        data:
+#          volume_level: '.4'
+#      - service: media_player.play_media
+#        entity_id: media_player.bedroom
+#        data:
+#          media_content_id: 'http://192.168.13.10/hl2.m4a'
+#          media_content_type: 'music'
 
   sonos_say:
     alias: "Sonos TTS script"
     sequence:
-     - service: media_player.sonos_snapshot
+     - service: sonos.snapshot
        data_template:
          entity_id: "{{ sonos_entity }}"
-     - service: media_player.sonos_unjoin
+     - service: sonos.unjoin
        data_template:
          entity_id: "{{ sonos_entity }}"
      - service: media_player.volume_set
        data_template:
          entity_id: "{{ sonos_entity }}"
          volume_level: "{{ volume }}"
-     - service: tts.google_say
+     - service: tts.google_translate_say
        data_template:
          entity_id: "{{ sonos_entity }}"
          message: "{{ message }}"
      - delay: "{{ delay }}"
-     - service: media_player.sonos_restore
+     - service: sonos.restore
        data_template:
          entity_id: "{{ sonos_entity }}"
 

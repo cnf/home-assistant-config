@@ -1,25 +1,9 @@
-homeassistant:
-  customize:
-    light.storage:
-      friendly_name: Storage Light
-    binary_sensor.storage_door_hal_sensor:
-      device_class: door
-      friendly_name: Storage Door
-    sensor.storage_door_hal_temperature:
-      friendly_name: Storage Door Temperature
-    sensor.storage_door_hal_access_control:
-      friendly_name: Storage Door Access Control
-
-group:
-  storage:
-    name: Storage
-    view: no
-    entities:
-      - light.storage
-      - binary_sensor.storage_door_hal_sensor
-      - sensor.storage_door_hal_temperature
-      #- sensor.storage_door_hal_access_control
-
+#homeassistant:
+#  customize:
+#    binary_sensor.storage_door_hal_sensor:
+#      device_class: door
+#    binary_sensor.storage_door_hal_sensor_2:
+#      device_class: door
 
 binary_sensor:
   - platform: template
@@ -33,63 +17,3 @@ binary_sensor:
           {%- else -%}
           false
           {%- endif -%}
-
-automation:
-  - alias: Storage - door opens
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.storage_door_hal_sensor
-        to: 'on'
-    action:
-      - service: script.turn_on
-        entity_id: script.storage_lights_turn_on
-
-  - alias: Storage - door closes
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.storage_door_hal_sensor
-        to: 'off'
-    action:
-      - service: script.turn_on
-        entity_id: script.storage_lights_turn_off
-
-script:
-  storage_lights_turn_off:
-    alias: Storage - light turn off
-    sequence:
-      - service: light.turn_off
-        entity_id:
-          - light.storage
-
-  storage_lights_turn_on:
-    alias: Storage - light turn on
-    sequence:
-      - service: script.turn_on
-        entity_id:
-          - script.storage_light_day
-          - script.storage_light_night
-
-  storage_light_day:
-    sequence:
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: alarm_control_panel.alarm
-          state: disarmed
-        - condition: state
-          entity_id: alarm_control_panel.alarm
-          state: pending
-      - service: light.turn_on
-        data:
-          entity_id: light.storage
-          brightness_pct: 100
-
-  storage_light_night:
-    sequence:
-      - condition: state
-        entity_id: alarm_control_panel.alarm
-        state: armed_night
-      - service: light.turn_on
-        data:
-          entity_id: light.storage
-          brightness_pct: 10

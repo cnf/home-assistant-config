@@ -2,18 +2,88 @@ input_select:
   lr_scenes:
     name: Livingroom Scene
     options:
+      - Aziz
       - Daytime
       - Evening
       - TV
       - PC Gaming
-      - F00
+      - Pink
+      - Red
+
+automation:
+  - alias: Livingroom Scene Aziz
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "Aziz"
+    action:
+      service: scene.turn_on
+      entity_id: scene.aziz
+  - alias: Livingroom Scene Daytime
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "Daytime"
+    action:
+      service: scene.turn_on
+      entity_id: scene.daytime
+  - alias: Livingroom Scene Evening
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "Evening"
+    action:
+      service: scene.turn_on
+      entity_id: scene.evening
+  - alias: Livingroom Scene PC Gaming
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "PC Gaming"
+    action:
+      service: scene.turn_on
+      entity_id: scene.pc_gaming
+  - alias: Livingroom Scene TV
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "TV"
+    action:
+      service: scene.turn_on
+      entity_id: scene.tv
+  - alias: Livingroom Scene Pink
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "Pink"
+    action:
+      service: scene.turn_on
+      entity_id: scene.pink
+  - alias: Livingroom Scene Red
+    trigger:
+      platform: state
+      entity_id: input_select.lr_scenes
+      to: "Red"
+    action:
+      service: scene.turn_on
+      entity_id: scene.red
       
 scene:
+  - name: Aziz
+    entities:
+      input_select.lr_scenes:
+        option: Aziz
+      group.lr_color_lights:
+        state: on
+        brightness_pct: 100
+        color_temp: 150
+      light.lr_media_strip:
+        state: off
   - name: Daytime
     entities:
       input_select.lr_scenes:
         option: Daytime
-      group.lr_media_backlight:
+      light.tv_backlight:
         state: off
       light.lr_pod_right:
         state: on
@@ -33,14 +103,17 @@ scene:
         color_temp: 150
       light.lr_ceiling:
         state: on
-        brightness_pct: 70
-        color_temp: 150
+        brightness_pct: 100
+        color_temp: 500
+        effect: colorloop
+      light.lr_tvtable:
+        state: off
 
   - name: Evening
     entities:
       input_select.lr_scenes:
         option: Evening
-      group.lr_media_backlight:
+      light.tv_backlight:
         state: on
         brightness_pct: 70
         color_temp: 500
@@ -62,18 +135,23 @@ scene:
         color_temp: 500
       light.lr_ceiling:
         state: on
-        brightness_pct: 60
+        brightness_pct: 100
         color_temp: 500
+        effect: colorloop
       light.hall:
         state: on
         brightness_pct: 40
         color_temp: 500
+      light.lr_tvtable:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 127, 0]
 
   - name: TV
     entities:
       input_select.lr_scenes:
         option: TV
-      group.lr_media_backlight:
+      light.tv_backlight:
         state: on
         brightness_pct: 50
         color_temp: 500
@@ -97,12 +175,16 @@ scene:
         state: on
         brightness_pct: 20
         color_temp: 500
+      light.lr_tvtable:
+        state: on
+        brightness_pct: 30
+        color_name: 'darkorange'
 
   - name: PC Gaming
     entities: 
       input_select.lr_scenes:
         option: PC Gaming
-      group.lr_media_backlight:
+      light.tv_backlight:
         state: on
         brightness_pct: 70
         color_name: 'darkorange'
@@ -124,21 +206,28 @@ scene:
         state: on
         brightness_pct: 30
         color_temp: 500
+        effect: colorloop
       light.hall:
         state: on
         brightness_pct: 40
         color_temp: 500
+      light.lr_tvtable:
+        state: on
+        brightness_pct: 100
+        color_name: 'darkorange'
 
-  - name: F00
+  - name: Pink
     entities: 
       input_select.lr_scenes:
-        option: F00
-      group.lr_media_backlight:
+        option: Pink
+      light.tv_backlight:
         state: on
         brightness_pct: 100
         rgb_color: [255, 0, 145]
       light.lr_message:
-        state: off
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 145]
       light.lr_tower_right:
         state: on
         brightness_pct: 100
@@ -147,11 +236,81 @@ scene:
         state: on
         brightness_pct: 100
         rgb_color: [255, 0, 145]
+      light.lr_ceiling:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 145]
       light.lr_pod_right:
         state: on
         brightness_pct: 100
         rgb_color: [255, 0, 145]
-      light.hall:
+      light.lr_tvtable:
         state: on
-        brightness_pct: 40
+        brightness_pct: 100
         rgb_color: [255, 0, 145]
+
+  - name: Red
+    entities: 
+      input_select.lr_scenes:
+        option: Red
+      light.tv_backlight:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_message:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_ceiling:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_tvtable:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+
+  - name: xmas
+    entities: 
+      input_select.lr_scenes:
+        option: xmas
+      light.tv_backlight:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_message:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_tower_right:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_tower_left:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_ceiling:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_pod_right:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]
+      light.lr_tvtable:
+        state: on
+        brightness_pct: 100
+        rgb_color: [255, 0, 0]

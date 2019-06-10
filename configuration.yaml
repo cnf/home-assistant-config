@@ -1,5 +1,5 @@
 homeassistant:
-  name: Home
+  name: Nullsense
   latitude: !secret latitude
   longitude: !secret longitude
   elevation: 20
@@ -7,24 +7,41 @@ homeassistant:
   temperature_unit: C
   time_zone: !secret timezone
   customize: !include customize.yaml
-  customize_glob:
-    sensor.*_alarm_level:
-      hidden: true
-    sensor.*_alarm_type:
-      hidden: true
-    sensor.*_sourcenodeid:
-      hidden: true
+  customize_glob: !include customize_glob.yaml
+#    sensor.*_alarm_level:
+#      hidden: true
+#    sensor.*_alarm_type:
+#      hidden: true
+#    sensor.*_sourcenodeid:
+#      hidden: true
+#    binary_sensor._2:
+#      hidden: true
+#    binary_sensor.*_smoke_sensor:
+#      device_class: smoke
+#    binary_sensor.*_pir_sensor:
+#      device_class: motion
+#    sensor.*_pir_relative_humidity:
+#      device_class: humidity
+#    sensor.*_pir_temperature:
+#      device_class: temperature
+#    sensor.*_pir_luminance:
+#      device_class: luminance
+#    sensor.*_pwr_power:
+#      device_class: power
   packages: !include_dir_named packages
 
-frontend:
-  javascript_version: latest
+person:
+system_health:
 
-map:
+#map:
 
 http:
   base_url: !secret http_url
-  api_password: !secret http_password
   use_x_forwarded_for: True
+  trusted_proxies: 
+    - 10.42.221.177
+    - 10.42.0.0/16
+    - 172.17.0.0/24
   ip_ban_enabled: True
   login_attempts_threshold: 5
 
@@ -33,4 +50,4 @@ config:
 sun:
 
 zone: !include zones.yaml
-group: !include groups.yaml
+#group: !include groups.yaml

@@ -1,7 +1,9 @@
 /secrets.yaml
+/.storage
 /.ios.conf
 /.HA_VERSION
 /.spotify-token-cache
+/.homekit.state
 /.uuid
 /OZW_Log.txt
 /gtfs
@@ -15,6 +17,8 @@
 /options.xml
 /zones.yaml
 /tts/*
+/deps
 
 *.log
 *-NOLOAD
+

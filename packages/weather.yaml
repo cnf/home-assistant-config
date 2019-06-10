@@ -1,0 +1,82 @@
+homeassistant:
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api
+    latitude: !secret latitude
+    longitude: !secret longitude
+  - platform: buienradar
+    latitude: !secret latitude
+    longitude: !secret longitude
+
+camera:
+  - platform: generic
+    still_image_url: !secret radar
+    name: Radar
+
+#  - platform: generic
+#    still_image_url: 'https://api.buienradar.nl/image/1.0/RadarMapBE?w=500&h=512'
+#    name: Radar Animated
+
+#sensor:
+#  - platform: darksky
+#    api_key: !secret darksky_api
+##  forecast:
+##  - 1
+##  - 2
+#    monitored_conditions:
+#      - summary
+#      - nearest_storm_distance
+#      - nearest_storm_bearing
+#      - precip_probability
+#      - minutely_summary
+#      - hourly_summary
+#      - daily_summary
+#      - temperature_max
+#      - temperature_min
+#      - temperature
+#      - humidity
+#      - precip_probability
+#      - precip_intensity
+#      - wind_speed
+#      - pressure
+#      - wind_bearing
+#      - apparent_temperature
+#      - icon
+#  - platform: yr
+#    name: Weather
+#    forecast: 1
+#    monitored_conditions:
+#    - temperature
+#    - symbol
+#    - humidity
+#    - cloudiness
+
+#  - platform: buienradar
+#    monitored_conditions:
+#    - condition
+#    - symbol
+#    - precipitation_forecast_average
+#    - rainchance_1d
+
+ # - platform: yweather
+ #   forecast: 1
+ #   name: yw_day1
+ #   monitored_conditions:
+ #     - weather
+ #     - temp_min
+ #     - temp_max
+#  - platform: yweather
+#    forecast: 2
+#    name: yw_day2
+#    monitored_conditions:
+#      - weather
+#      - temp_min
+#      - temp_max
+#  - platform: yweather
+#    forecast: 3
+#    name: yw_day3
+#    monitored_conditions:
+#      - weather
+#      - temp_min
+#      - temp_max

@@ -1,0 +1,18 @@
+sensor:
+sensor:
+  - platform: waqi
+    token: !secretwaqi_key
+    locations:
+      - Deurne
+
+  - platform: airvisual
+    api_key: !secret airvisual_key
+    monitored_conditions:
+      - us
+    latitude: !secret latitude
+    longitude: !secret longitude
+    #city: Deurne
+    #state: Antwerpen
+    #country: Belgium
+    #radius: 500
+    #show_on_map: false

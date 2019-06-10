@@ -1,14 +1,14 @@
-homeassistant:
-  customize:
-    sensor.season:
-      friendly_name: season
-      icon: mdi:calendar-clock
+#homeassistant:
+#  customize:
+#    sensor.season:
+#      friendly_name: season
+#      icon: mdi:calendar-clock
 
-group:
-  season_card:
-   name: Season
-   entities:
-     - sensor.season
+#group:
+#  season_card:
+#   name: Season
+#   entities:
+#     - sensor.season
 
 
 sensor:
